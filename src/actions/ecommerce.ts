@@ -2,7 +2,7 @@ import { configureSpace } from '@flatfile/plugin-space-configure'
 import * as ecommerceBlueprints from '../blueprints/ecommerce/_index'
 import { FlatfileListener } from '@flatfile/listener'
 
-export function ecommerceSpaceConfigure(listener: FlatfileListener) {
+export function ecommerceProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
     configureSpace({
       space: {

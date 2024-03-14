@@ -1,6 +1,7 @@
 import { FlatfileListener } from '@flatfile/listener'
-import { plmSpaceConfigure } from './actions/plm'
-import { ecommerceSpaceConfigure } from './actions/ecommerce'
+import { plmProjectSpaceConfigure } from './actions/plm'
+import { ecommerceProjectSpaceConfigure } from './actions/ecommerce'
+import { fieldServicesProjectSpaceConfigure } from './actions/fieldServicesProjects'
 import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor'
 import { JSONExtractor } from '@flatfile/plugin-json-extractor'
 
@@ -12,13 +13,19 @@ export default function (listener: FlatfileListener) {
   })
 
   listener.namespace('space:plmproject', (listener) => {
-    listener.use(plmSpaceConfigure)
+    listener.use(plmProjectSpaceConfigure)
     listener.use(ExcelExtractor())
     listener.use(JSONExtractor())
   })
 
   listener.namespace('space:ecommerceproject', (listener) => {
-    listener.use(ecommerceSpaceConfigure)
+    listener.use(ecommerceProjectSpaceConfigure)
+    listener.use(ExcelExtractor())
+    listener.use(JSONExtractor())
+  })
+
+  listener.namespace('space:servicesproject', (listener) => {
+    listener.use(fieldServicesProjectSpaceConfigure)
     listener.use(ExcelExtractor())
     listener.use(JSONExtractor())
   })

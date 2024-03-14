@@ -1,8 +1,8 @@
 import { configureSpace } from '@flatfile/plugin-space-configure'
-import * as plmBlueprints from '../blueprints/plm/_index'
+import * as fieldServicesBlueprints from '../blueprints/fieldservices/_index'
 import { FlatfileListener } from '@flatfile/listener'
 
-export function plmProjectSpaceConfigure(listener: FlatfileListener) {
+export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
     configureSpace({
       space: {
@@ -14,13 +14,16 @@ export function plmProjectSpaceConfigure(listener: FlatfileListener) {
       },
       workbooks: [
         {
-          name: 'PLM Import',
-          namespace: 'plmImport',
+          name: 'Field Services Import',
+          namespace: 'fieldServicesImport',
           sheets: [
-            plmBlueprints.attributes,
-            plmBlueprints.suppliers,
-            plmBlueprints.categories,
-            plmBlueprints.products,
+            fieldServicesBlueprints.workOrders,
+            fieldServicesBlueprints.customers,
+            fieldServicesBlueprints.technicians,
+            fieldServicesBlueprints.inventory,
+            fieldServicesBlueprints.serviceContracts,
+            fieldServicesBlueprints.suppliers,
+            fieldServicesBlueprints.schedules,
           ],
           actions: [
             {
