@@ -1,6 +1,6 @@
 import { SheetConfig } from '@flatfile/api/api'
 
-export const categories = {
+export const categories: SheetConfig = {
   name: 'Product Categories',
   description: 'A list of product categories',
   slug: 'product_categories',
@@ -34,4 +34,4 @@ export const categories = {
       type: 'string',
     },
   ],
-} as SheetConfig
+}

@@ -1,6 +1,6 @@
 import { SheetConfig } from '@flatfile/api/api'
 
-export const inventory = {
+export const inventory: SheetConfig = {
   name: 'Inventory',
   slug: 'inventory',
   fields: [
@@ -29,4 +29,4 @@ export const inventory = {
     { key: 'price', label: 'Price', type: 'number' },
     { key: 'notes', label: 'Notes', type: 'string' },
   ],
-} as SheetConfig
+}

@@ -1,6 +1,6 @@
 import { SheetConfig } from '@flatfile/api/api'
 
-export const customers = {
+export const customers: SheetConfig = {
   name: 'Customers',
   description: 'A list of customers',
   slug: 'customers',
@@ -10,12 +10,8 @@ export const customers = {
       label: 'Customer ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
       ],
     },
     {
@@ -23,9 +19,7 @@ export const customers = {
       label: 'First Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
       ],
     },
     {
@@ -33,9 +27,7 @@ export const customers = {
       label: 'Last Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
       ],
     },
     {
@@ -69,4 +61,4 @@ export const customers = {
       type: 'string',
     },
   ],
-} as SheetConfig
+}

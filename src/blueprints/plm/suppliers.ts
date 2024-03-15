@@ -1,6 +1,6 @@
 import { SheetConfig } from '@flatfile/api/api'
 
-export const suppliers = {
+export const suppliers: SheetConfig = {
   name: 'Suppliers',
   description: 'A list of suppliers',
   slug: 'suppliers',
@@ -65,4 +65,4 @@ export const suppliers = {
       type: 'string',
     },
   ],
-} as SheetConfig
+}
