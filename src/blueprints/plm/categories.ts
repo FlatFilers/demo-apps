@@ -10,12 +10,9 @@ export const categories: SheetConfig = {
       label: 'Category ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
     },
     {
@@ -23,15 +20,17 @@ export const categories: SheetConfig = {
       label: 'Category Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
       ],
     },
     {
       key: 'description',
       label: 'Description',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { max: 500 } },
+      ],
     },
   ],
 }

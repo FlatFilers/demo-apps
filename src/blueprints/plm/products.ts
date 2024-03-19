@@ -10,12 +10,9 @@ export const products: SheetConfig = {
       label: 'Product ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
     },
     {
@@ -23,15 +20,17 @@ export const products: SheetConfig = {
       label: 'Product Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
       ],
     },
     {
       key: 'description',
       label: 'Description',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { max: 1000 } },
+      ],
     },
     {
       key: 'category',
@@ -42,14 +41,18 @@ export const products: SheetConfig = {
         key: 'category_id',
         relationship: 'has-one',
       },
+      constraints: [{ type: 'required' }],
     },
     {
       key: 'price',
       label: 'Price',
       type: 'number',
       constraints: [
+        { type: 'required' },
         {
-          type: 'required',
+          type: 'external',
+          validator: 'numberRange',
+          config: { min: 0, max: 1000000 },
         },
       ],
     },
@@ -58,8 +61,11 @@ export const products: SheetConfig = {
       label: 'Quantity',
       type: 'number',
       constraints: [
+        { type: 'required' },
         {
-          type: 'required',
+          type: 'external',
+          validator: 'numberRange',
+          config: { min: 0, max: 1000000 },
         },
       ],
     },
@@ -68,6 +74,7 @@ export const products: SheetConfig = {
       label: 'Image URL',
       type: 'string',
       description: 'URL of the product image',
+      constraints: [{ type: 'external', validator: 'url' }],
     },
     {
       key: 'supplier',
@@ -78,11 +85,7 @@ export const products: SheetConfig = {
         key: 'supplier_id',
         relationship: 'has-one',
       },
-      constraints: [
-        {
-          type: 'required',
-        },
-      ],
+      constraints: [{ type: 'required' }],
     },
     {
       key: 'attribute',

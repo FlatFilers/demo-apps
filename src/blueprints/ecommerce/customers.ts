@@ -9,10 +9,7 @@ export const customers: SheetConfig = {
       key: 'customer_id',
       label: 'Customer ID',
       type: 'string',
-      constraints: [
-        { type: 'required' },
-        { type: 'unique' },
-      ],
+      constraints: [{ type: 'required' }, { type: 'unique' }],
     },
     {
       key: 'first_name',
@@ -20,6 +17,7 @@ export const customers: SheetConfig = {
       type: 'string',
       constraints: [
         { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 50 } },
       ],
     },
     {
@@ -28,37 +26,93 @@ export const customers: SheetConfig = {
       type: 'string',
       constraints: [
         { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 50 } },
       ],
     },
     {
       key: 'email',
       label: 'Email',
       type: 'string',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'email' },
+      ],
     },
     {
       key: 'phone',
       label: 'Phone Number',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'phone', config: { format: 'US' } },
+      ],
     },
     {
       key: 'address',
       label: 'Address',
       type: 'string',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 5, max: 100 } },
+      ],
     },
     {
       key: 'city',
       label: 'City',
       type: 'string',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 50 } },
+      ],
     },
     {
       key: 'state',
       label: 'State',
       type: 'string',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 50 } },
+      ],
+    },
+    {
+      key: 'zip_code',
+      label: 'Zip Code',
+      type: 'string',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'zipCode',
+          config: { countryCode: 'US' },
+        },
+      ],
     },
     {
       key: 'country',
       label: 'Country',
       type: 'string',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 50 } },
+      ],
+    },
+    {
+      key: 'website',
+      label: 'Website',
+      type: 'string',
+      constraints: [{ type: 'external', validator: 'url' }],
+    },
+    {
+      key: 'registration_date',
+      label: 'Registration Date',
+      type: 'date',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'YYYY-MM-DD' },
+        },
+      ],
     },
   ],
 }
