@@ -1,11 +1,18 @@
+import { PhoneNumberUtil } from 'google-libphonenumber'
+
+const phoneUtil = PhoneNumberUtil.getInstance()
+
 export const externalConstraints = {
   length: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        if (value.length < config.min || value.length > config.max) {
+        const minLength = config.min || 1
+        const maxLength = config.max
+
+        if (value.length < minLength || value.length > maxLength) {
           record.addError(
             key,
-            `Text must be between ${config.min} and ${config.max} characters.`
+            `Text must be between ${minLength} and ${maxLength} characters.`
           )
         }
       }
@@ -24,12 +31,13 @@ export const externalConstraints = {
   phone: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const phoneRegex = /^\+?\d{10,14}$/
-        if (!phoneRegex.test(value)) {
-          record.addError(
-            key,
-            `Phone number must be a valid number with format: ${config.format}.`
-          )
+        try {
+          const phoneNumber = phoneUtil.parse(value, config.region)
+          if (!phoneUtil.isValidNumber(phoneNumber)) {
+            record.addError(key, 'Invalid phone number.')
+          }
+        } catch (error) {
+          record.addError(key, 'Invalid phone number format.')
         }
       }
     },

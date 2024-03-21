@@ -19,7 +19,8 @@
     "@flatfile/plugin-space-configure": "0.3.2",
     "@flatfile/plugin-xlsx-extractor": "1.11.1",
     "axios": "1.6.7",
-    "flatfile": "3.6.0"
+    "flatfile": "3.6.0",
+    "google-libphonenumber": "^3.2.34"
   },
   "devDependencies": {
     "@types/node": "^18.16.0"

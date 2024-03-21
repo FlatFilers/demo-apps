@@ -43,7 +43,7 @@ export const customers: SheetConfig = {
       label: 'Phone Number',
       type: 'string',
       constraints: [
-        { type: 'external', validator: 'phone', config: { format: 'US' } },
+        { type: 'external', validator: 'phone', config: { region: 'US' } },
       ],
     },
     {
