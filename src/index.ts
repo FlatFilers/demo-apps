@@ -39,9 +39,18 @@ export default function (listener: FlatfileListener) {
     )
   })
 
-  Object.keys(namespaceConfigs).forEach((namespace) => {
-    listener.namespace(namespace, (listener) => {
-      configureNamespace(listener, namespace)
-    })
+  // Configure each namespace explicitly
+  listener.namespace('space:plmproject', (listener) => {
+    configureNamespace(listener, 'space:plmproject')
   })
+
+  listener.namespace('space:ecommerceproject', (listener) => {
+    configureNamespace(listener, 'space:ecommerceproject')
+  })
+
+  listener.namespace('space:servicesproject', (listener) => {
+    configureNamespace(listener, 'space:servicesproject')
+  })
+
+  // Add more namespace configurations as needed)
 }
