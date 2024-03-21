@@ -10,12 +10,9 @@ export const suppliers: SheetConfig = {
       label: 'Supplier ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
     },
     {
@@ -23,46 +20,55 @@ export const suppliers: SheetConfig = {
       label: 'Supplier Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
       ],
     },
     {
       key: 'email',
       label: 'Email',
       type: 'string',
-      metadata: {
-        validationType: 'EMAIL',
-      },
+      constraints: [{ type: 'external', validator: 'email' }],
     },
     {
       key: 'phone',
       label: 'Phone Number',
       type: 'string',
-      metadata: {
-        format: 'phone',
-      },
+      constraints: [
+        { type: 'external', validator: 'phone', config: { format: 'US' } },
+      ],
     },
     {
       key: 'address',
       label: 'Address',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { min: 5, max: 200 } },
+      ],
     },
     {
       key: 'city',
       label: 'City',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
+      ],
     },
     {
       key: 'state',
       label: 'State',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
+      ],
     },
     {
       key: 'country',
       label: 'Country',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
+      ],
     },
   ],
 }

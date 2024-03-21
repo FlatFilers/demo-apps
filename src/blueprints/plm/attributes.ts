@@ -10,12 +10,9 @@ export const attributes: SheetConfig = {
       label: 'Attribute ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
     },
     {
@@ -23,9 +20,8 @@ export const attributes: SheetConfig = {
       label: 'Attribute Name',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 2, max: 100 } },
       ],
     },
     {
@@ -33,15 +29,17 @@ export const attributes: SheetConfig = {
       label: 'Attribute Value',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 200 } },
       ],
     },
     {
       key: 'unit',
       label: 'Unit',
       type: 'string',
+      constraints: [
+        { type: 'external', validator: 'length', config: { max: 50 } },
+      ],
     },
   ],
 }

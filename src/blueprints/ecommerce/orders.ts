@@ -10,12 +10,9 @@ export const orders: SheetConfig = {
       label: 'Order ID',
       type: 'string',
       constraints: [
-        {
-          type: 'required',
-        },
-        {
-          type: 'unique',
-        },
+        { type: 'required' },
+        { type: 'unique' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
     },
     {
@@ -27,19 +24,22 @@ export const orders: SheetConfig = {
         key: 'customer_id',
         relationship: 'has-one',
       },
-      constraints: [
-        {
-          type: 'required',
-        },
-      ],
+      constraints: [{ type: 'required' }],
     },
     {
       key: 'order_date',
       label: 'Order Date',
       type: 'date',
       constraints: [
+        { type: 'required' },
         {
-          type: 'required',
+          type: 'external',
+          validator: 'dateRange',
+          config: {
+            min: '2000-01-01',
+            max: '2100-12-31',
+            format: 'YYYY-MM-DD',
+          },
         },
       ],
     },
@@ -48,8 +48,11 @@ export const orders: SheetConfig = {
       label: 'Total Amount',
       type: 'number',
       constraints: [
+        { type: 'required' },
         {
-          type: 'required',
+          type: 'external',
+          validator: 'numberRange',
+          config: { min: 0, max: 1000000 },
         },
       ],
     },
@@ -59,24 +62,13 @@ export const orders: SheetConfig = {
       type: 'enum',
       config: {
         options: [
-          {
-            value: 'pending',
-            label: 'Pending',
-          },
-          {
-            value: 'processing',
-            label: 'Processing',
-          },
-          {
-            value: 'shipped',
-            label: 'Shipped',
-          },
-          {
-            value: 'delivered',
-            label: 'Delivered',
-          },
+          { value: 'pending', label: 'Pending' },
+          { value: 'processing', label: 'Processing' },
+          { value: 'shipped', label: 'Shipped' },
+          { value: 'delivered', label: 'Delivered' },
         ],
       },
+      constraints: [{ type: 'required' }],
     },
   ],
 }
