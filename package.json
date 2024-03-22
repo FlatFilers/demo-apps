@@ -11,15 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@flatfile/api": "1.7.5",
+    "@flatfile/api": "1.7.8",
     "@flatfile/listener": "1.0.1",
     "@flatfile/plugin-constraints": "^1.1.6",
     "@flatfile/plugin-json-extractor": "0.7.1",
     "@flatfile/plugin-record-hook": "1.4.3",
     "@flatfile/plugin-space-configure": "0.3.2",
-    "@flatfile/plugin-xlsx-extractor": "1.11.1",
-    "axios": "1.6.7",
-    "flatfile": "3.6.0",
+    "@flatfile/plugin-xlsx-extractor": "1.11.4",
+    "axios": "1.6.8",
+    "flatfile": "3.6.2",
     "google-libphonenumber": "^3.2.34"
   },
   "devDependencies": {
