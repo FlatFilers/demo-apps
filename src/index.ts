@@ -35,7 +35,10 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
 export default function (listener: FlatfileListener) {
   listener.on('**', (event) => {
     console.log(
-      `-> My event listener received an event: ${JSON.stringify(event)}`
+      `-> My event listener received an event: 
+      ${JSON.stringify(event.topic)}
+      ${JSON.stringify(event.namespace)} 
+      ${JSON.stringify(event.payload)}`
     )
   })
 
