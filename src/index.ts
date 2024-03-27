@@ -1,10 +1,10 @@
 import { FlatfileListener } from '@flatfile/listener'
-import { plmProjectSpaceConfigure } from './actions/plmProjectSpaceConfigure'
-import { ecommerceProjectSpaceConfigure } from './actions/ecommerceProjectSpaceConfigure'
-import { fieldServicesProjectSpaceConfigure } from './actions/fieldServicesProjects'
+import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure'
+import { ecommerceProjectSpaceConfigure } from './workflows/ecommerce/actions/ecommerceProjectSpaceConfigure'
+import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects'
 import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor'
 import { JSONExtractor } from '@flatfile/plugin-json-extractor'
-import { externalConstraints } from './externalContraints/externalConstraints'
+import { externalConstraints } from './shared/externalContraints/externalConstraints'
 import { externalConstraint } from '@flatfile/plugin-constraints'
 
 const namespaceConfigs = {
