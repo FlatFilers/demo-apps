@@ -1,5 +1,5 @@
 import { configureSpace } from '@flatfile/plugin-space-configure'
-import * as plmBlueprints from '../blueprints/plm/_index'
+import * as plmBlueprints from '../blueprints/_index'
 import { FlatfileListener } from '@flatfile/listener'
 
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
