@@ -1,15 +1,14 @@
 import { FlatfileListener } from '@flatfile/listener'
 import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure'
-import { ecommerceProjectSpaceConfigure } from './workflows/ecommerce/actions/ecommerceProjectSpaceConfigure'
 import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects'
 import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor'
 import { JSONExtractor } from '@flatfile/plugin-json-extractor'
 import { externalConstraints } from './shared/externalContraints/externalConstraints'
 import { externalConstraint } from '@flatfile/plugin-constraints'
+import { validations } from './shared/validations/validations'
 
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
-  'space:ecommerceproject': ecommerceProjectSpaceConfigure,
   'space:servicesproject': fieldServicesProjectSpaceConfigure,
   // Add more namespace configurations as needed
 }
@@ -30,6 +29,8 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
   } else {
     console.warn(`No configuration found for namespace: ${namespace}`)
   }
+  // Apply Bulk Record Hook Validations
+  listener.use(validations)
 }
 
 export default function (listener: FlatfileListener) {
@@ -45,10 +46,6 @@ export default function (listener: FlatfileListener) {
   // Configure each namespace explicitly
   listener.namespace('space:plmproject', (listener) => {
     configureNamespace(listener, 'space:plmproject')
-  })
-
-  listener.namespace('space:ecommerceproject', (listener) => {
-    configureNamespace(listener, 'space:ecommerceproject')
   })
 
   listener.namespace('space:servicesproject', (listener) => {
