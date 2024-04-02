@@ -154,5 +154,43 @@ export const products: SheetConfig = {
         relationship: 'has-many',
       },
     },
+    {
+      key: 'is_active',
+      label: 'Is Active',
+      type: 'boolean',
+      description: 'Indicates if the product is currently active',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'boolean' },
+      ],
+    },
+    {
+      key: 'created_at',
+      label: 'Created At',
+      type: 'date',
+      description: 'The date when the product was created',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
+      ],
+    },
+    {
+      key: 'updated_at',
+      label: 'Updated At',
+      type: 'date',
+      description: 'The date when the product was last updated',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
+      ],
+    },
   ],
 }
