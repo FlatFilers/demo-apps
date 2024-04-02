@@ -1,6 +1,7 @@
 // plmValidations.ts
 import { FlatfileRecord } from '@flatfile/hooks'
 
+// Exchange rates for various currencies
 const exchangeRates = {
   USD: 1.0,
   EUR: 0.91,
@@ -14,62 +15,72 @@ const exchangeRates = {
   SGD: 1.34,
 }
 
-export function validateTotalValue(record: FlatfileRecord) {
-  const price = record.get('price') as number
-  const quantity = record.get('quantity') as number
+// Constants for field names
+const CURRENCY_FIELD = 'currency'
+const PRICE_FIELD = 'price'
+const QUANTITY_FIELD = 'quantity'
+const TOTAL_VALUE_FIELD = 'total_value'
+const TOTAL_VALUE_USD_FIELD = 'total_value_usd'
 
-  if (price === undefined || quantity === undefined) {
-    if (price === undefined) {
-      console.log('Price is required to calculate total value')
-      record.addError('price', 'Price is required to calculate total value')
-    }
+/**
+ * Validates and calculates the total value based on price and quantity.
+ * @param record The FlatfileRecord object.
+ * @returns The updated FlatfileRecord object with the total value set.
+ */
+export function validateTotalValue(record: FlatfileRecord): FlatfileRecord {
+  // Get the price and quantity values as strings
+  const priceString = record.get(PRICE_FIELD) as string | undefined
+  const quantityString = record.get(QUANTITY_FIELD) as string | undefined
 
-    if (quantity === undefined) {
-      console.log('Quantity is required to calculate total value')
-      record.addError(
-        'quantity',
-        'Quantity is required to calculate total value'
-      )
-    }
-  } else {
+  // Convert the price and quantity strings to numbers
+  const price = priceString ? parseFloat(priceString) : undefined
+  const quantity = quantityString ? parseFloat(quantityString) : undefined
+
+  // Check if price and quantity are valid numbers
+  if (!isNaN(price) && !isNaN(quantity)) {
+    // Calculate the total value
     const totalValue = price * quantity
-    record.set('total_value', totalValue)
+    // Set the total value in the record
+    record.set(TOTAL_VALUE_FIELD, totalValue)
   }
 
   return record
 }
 
-export function calculateTotalValueUSD(record: FlatfileRecord) {
-  const totalValue = record.get('total_value') as number
-  const currency = record.get('currency') as string
+/**
+ * Calculates the total value in USD based on the total value and currency.
+ * @param record The FlatfileRecord object.
+ * @returns The updated FlatfileRecord object with the total value in USD set.
+ */
+export function calculateTotalValueUSD(record: FlatfileRecord): FlatfileRecord {
+  // Get the total value and currency from the record
+  const totalValue = record.get(TOTAL_VALUE_FIELD) as number | undefined
+  const currency = record.get(CURRENCY_FIELD) as string | undefined
 
-  console.log('Total Value:', totalValue)
-  console.log('Currency:', currency)
+  // Check if total value is a number and currency is a string
+  if (typeof totalValue === 'number' && typeof currency === 'string') {
+    // Get the exchange rate based on the currency
+    const exchangeRate = exchangeRates[currency]
 
-  if (totalValue !== undefined && currency !== undefined) {
-    console.log('Total Value and Currency are defined')
+    // Check if the exchange rate exists
+    if (exchangeRate) {
+      // Calculate the total value in USD
+      const totalValueUSD = exchangeRate !== 0 ? totalValue / exchangeRate : 0
+      // Round the total value in USD to two decimal places
+      const roundedTotalValueUSD = Math.round(totalValueUSD * 100) / 100
+      // Format the rounded value to always have two decimal places
+      const formattedTotalValueUSD = roundedTotalValueUSD.toFixed(2)
+      // Set the formatted total value in USD in the record
+      record.set(TOTAL_VALUE_USD_FIELD, parseFloat(formattedTotalValueUSD))
 
-    if (exchangeRates[currency]) {
-      console.log('Exchange Rate found for Currency:', currency)
-      console.log('Exchange Rate:', exchangeRates[currency])
-
-      const totalValueUSD = totalValue / exchangeRates[currency]
-      console.log('Calculated Total Value USD:', totalValueUSD)
-
-      record.set('total_value_usd', totalValueUSD)
-    } else {
-      console.log('Invalid Currency:', currency)
-      record.addError('currency', 'Invalid currency')
-    }
-  } else {
-    console.log('Total Value or Currency is undefined')
-
-    if (totalValue === undefined) {
-      console.log('Total Value is undefined')
-    }
-
-    if (currency === undefined) {
-      console.log('Currency is undefined')
+      // Check if the original total value in USD is different from the rounded value
+      if (totalValueUSD !== roundedTotalValueUSD) {
+        // Add an info message to the record indicating the rounding
+        record.addInfo(
+          TOTAL_VALUE_USD_FIELD,
+          `The total value in USD has been rounded to two decimal places. Original value: ${totalValueUSD}`
+        )
+      }
     }
   }
 
