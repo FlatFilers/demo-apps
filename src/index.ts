@@ -7,6 +7,9 @@ import { JSONExtractor } from '@flatfile/plugin-json-extractor';
 import { externalConstraints } from './shared/externalContraints/externalConstraints';
 import { externalConstraint } from '@flatfile/plugin-constraints';
 import { handleSubmitData } from './shared/eventHandlers/handleSubmitData';
+import api from '@flatfile/api';
+import { attributes as attributesBlueprint } from './workflows/plm/blueprints/attributes';
+import { ProductsShowApiService } from './shared/products-show-api-service';
 
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
@@ -22,6 +25,59 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
     listener.use(ExcelExtractor());
     listener.use(JSONExtractor());
     listener.use(handleSubmitData());
+
+    // Seed the workbook with data
+    listener.on('workbook:created', async (event) => {
+      if (!event.context || !event.context.workbookId) {
+        console.error('Event context or workbookId missing');
+        return;
+      }
+
+      const workbookId = event.context.workbookId;
+      let workbook;
+      try {
+        workbook = await api.workbooks.get(workbookId);
+      } catch (error) {
+        console.error('Error getting workbook:', error.message);
+        throw error;
+      }
+
+      const workbookName =
+        workbook.data && workbook.data.name ? workbook.data.name : '';
+
+      if (workbookName.includes('HCM Workbook')) {
+        const sheets =
+          workbook.data && workbook.data.sheets ? workbook.data.sheets : [];
+
+        const attributesSheet = sheets.find(
+          (s) => s.config.slug === attributesBlueprint.slug
+        );
+
+        console.log('Fetching attributes from products.show...');
+
+        // Fetch attributes from products.show API
+        const attributes = await ProductsShowApiService.fetchAttributes(event);
+
+        if (attributesSheet && attributes && attributes.length > 0) {
+          const attributeSheetId = attributesSheet.id;
+
+          const mappedAttributes = attributes.map(
+            ({ externalId, name, value, unit }) => ({
+              attribute_id: { value: externalId },
+              name: { value: name },
+              value: { value: value },
+              unit: { value: unit },
+            })
+          );
+
+          try {
+            await api.records.insert(attributeSheetId, mappedAttributes);
+          } catch (error) {
+            console.error('Error inserting attributes:', error.message);
+          }
+        }
+      }
+    });
 
     // Apply external constraints
     Object.entries(externalConstraints).forEach(
