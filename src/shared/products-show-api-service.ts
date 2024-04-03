@@ -1,6 +1,7 @@
 import { FlatfileEvent } from '@flatfile/listener';
 import axios from 'axios';
 import { getUserIdFromSpace } from './utils/get-user-id-from-space';
+import invariant from 'ts-invariant';
 
 type AttributeResult = {
   externalId: string;
@@ -33,7 +34,7 @@ export class ProductsShowApiService {
       response = [];
     }
 
-    const attributes = response.attributes as AttributeResult[];
+    const attributes = response.data.attributes as AttributeResult[];
 
     console.log('Attributes found: ' + JSON.stringify(attributes));
 
@@ -41,7 +42,11 @@ export class ProductsShowApiService {
   };
 
   private static headers = async (event: FlatfileEvent) => {
-    const listenerAuthToken = await this.getListenerAuthToken(event);
+    const listenerAuthToken = await event.secrets('LISTENER_AUTH_TOKEN');
+    invariant(
+      listenerAuthToken,
+      'Missing LISTENER_AUTH_TOKEN in environment secrets'
+    );
     const userId = await getUserIdFromSpace(event.context.spaceId);
 
     return {
@@ -49,15 +54,5 @@ export class ProductsShowApiService {
       'x-listener-auth': listenerAuthToken,
       'x-user-id': userId,
     };
-  };
-
-  private static getListenerAuthToken = async (event: FlatfileEvent) => {
-    try {
-      return await event.secrets('LISTENER_AUTH_TOKEN');
-    } catch (e) {
-      const message = 'Error - no LISTENER_AUTH_TOKEN found in secrets';
-      console.error(message);
-      throw new Error(message);
-    }
   };
 }
