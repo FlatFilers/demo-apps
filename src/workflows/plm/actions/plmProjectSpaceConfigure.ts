@@ -1,6 +1,8 @@
-import { configureSpace } from '@flatfile/plugin-space-configure'
-import * as plmBlueprints from '../blueprints/_index'
-import { FlatfileListener } from '@flatfile/listener'
+import { configureSpace } from '@flatfile/plugin-space-configure';
+import * as plmBlueprints from '../blueprints/_index';
+import { FlatfileListener } from '@flatfile/listener';
+
+export const WORKBOOK_NAME = 'PLM Import';
 
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
@@ -14,7 +16,7 @@ export function plmProjectSpaceConfigure(listener: FlatfileListener) {
       },
       workbooks: [
         {
-          name: 'PLM Import',
+          name: WORKBOOK_NAME,
           namespace: 'plmImport',
           sheets: [
             plmBlueprints.attributes,
@@ -34,5 +36,5 @@ export function plmProjectSpaceConfigure(listener: FlatfileListener) {
         },
       ],
     })
-  )
+  );
 }

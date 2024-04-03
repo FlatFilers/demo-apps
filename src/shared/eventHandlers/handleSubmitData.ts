@@ -18,11 +18,11 @@ export const handleSubmitData =
             progress: 10,
           });
 
-          const webhookUrl = await event.secrets('WEBHOOK_URL');
-          invariant(webhookUrl, 'Missing WEBHOOK_URL in environment secrets');
+          const apiBaseUrl = await event.secrets('API_BASE_URL');
+          invariant(apiBaseUrl, 'Missing API_BASE_URL in environment secrets');
 
           const response = await axios.get(
-            `${webhookUrl}/api/webhook/sync-space/${spaceId}`,
+            `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
             {
               headers: {
                 'Content-Type': 'application/json',
