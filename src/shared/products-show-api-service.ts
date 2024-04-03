@@ -1,6 +1,5 @@
 import { FlatfileEvent } from '@flatfile/listener';
 import axios from 'axios';
-import { getUserIdFromSpace } from './utils/get-user-id-from-space';
 import invariant from 'ts-invariant';
 
 type AttributeResult = {

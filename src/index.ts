@@ -32,9 +32,6 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
 
     // Seed the workbook with data
     listener.on('workbook:created', async (event) => {
-      console.log('=======================');
-      console.log('WORKBOOK CREATED EVENT');
-      console.log('=======================');
       if (!event.context || !event.context.workbookId) {
         console.error('Event context or workbookId missing');
         return;
