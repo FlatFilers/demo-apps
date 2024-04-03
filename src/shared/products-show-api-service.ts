@@ -47,12 +47,11 @@ export class ProductsShowApiService {
       listenerAuthToken,
       'Missing LISTENER_AUTH_TOKEN in environment secrets'
     );
-    const userId = await getUserIdFromSpace(event.context.spaceId);
 
     return {
       'Content-Type': 'application/json',
       'x-listener-auth': listenerAuthToken,
-      'x-user-id': userId,
+      'x-space-id': event.context.spaceId,
     };
   };
 }
