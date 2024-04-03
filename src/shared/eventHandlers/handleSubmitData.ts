@@ -3,51 +3,55 @@ import api from '@flatfile/api';
 import invariant from 'ts-invariant';
 import axios from 'axios';
 
-export const handleSubmitData = () => (listener: FlatfileListener) => {
-  listener.on('job:ready', { job: 'workbook:submitAction' }, async (event) => {
-    // console.log("event", event);
-    // console.log("context", event.context);
-    // console.log("payload", event.payload);
+export const handleSubmitData =
+  () =>
+  (listener: FlatfileListener): void => {
+    listener.on(
+      'job:ready',
+      { job: 'workbook:submitAction' },
+      async (event) => {
+        const { spaceId, jobId } = event.context;
 
-    const { spaceId, jobId } = event.context;
+        try {
+          await api.jobs.ack(jobId, {
+            info: 'Starting job to submit data to webhook',
+            progress: 10,
+          });
 
-    try {
-      await api.jobs.ack(jobId, {
-        info: 'Starting job to submit data to webhook',
-        progress: 10,
-      });
+          const webhookUrl = await event.secrets('WEBHOOK_URL');
+          invariant(webhookUrl, 'Missing WEBHOOK_URL in environment secrets');
 
-      const webhookUrl = await event.secrets('WEBHOOK_URL');
-      invariant(webhookUrl, 'Missing WEBHOOK_URL in environment secrets');
+          const response = await axios.get(
+            `${webhookUrl}/api/webhook/sync-space/${spaceId}`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
-      console.log('WebhookURl', webhookUrl);
+          if (response.status !== 200) {
+            throw new Error('Failed to submit data to webhook');
+          }
+        } catch (error) {
+          console.log(
+            `Error calling webhook: ${
+              error.message || JSON.stringify(error, null, 2)
+            }`
+          );
 
-      const response = await axios.get(
-        `${webhookUrl}/api/webhook/sync-space/${spaceId}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          await api.jobs.fail(jobId, {
+            outcome: {
+              message: error,
+            },
+          });
         }
-      );
 
-      if (response.status !== 200) {
-        throw new Error('Failed to submit data to webhook');
+        await api.jobs.complete(jobId, {
+          outcome: {
+            message: 'Data was successfully submitted.',
+          },
+        });
       }
-    } catch (error) {
-      console.log(`Error calling webhook: ${JSON.stringify(error, null, 2)}`);
-
-      await api.jobs.fail(jobId, {
-        outcome: {
-          message: error,
-        },
-      });
-    }
-
-    await api.jobs.complete(jobId, {
-      outcome: {
-        message: 'Data was successfully submitted.',
-      },
-    });
-  });
-};
+    );
+  };
