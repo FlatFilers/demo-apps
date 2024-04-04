@@ -9,7 +9,41 @@ type AttributeResult = {
   unit?: string;
 };
 
+type SyncedRecordsResponse = {
+  syncedFlatfileRecordIds: string[];
+};
+
 export class ProductsShowApiService {
+  static syncSpace = async (
+    event: FlatfileEvent
+  ): Promise<SyncedRecordsResponse> => {
+    const { spaceId } = event.context;
+
+    try {
+      const apiBaseUrl = await event.secrets('API_BASE_URL');
+      invariant(apiBaseUrl, 'Missing API_BASE_URL in environment secrets');
+
+      const response = await axios.get(
+        `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
+        {
+          headers: await this.headers(event),
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Failed to submit data to webhook');
+      }
+
+      return response.data as SyncedRecordsResponse;
+    } catch (error) {
+      console.log(
+        `Error calling sync space: ${
+          error.message || JSON.stringify(error, null, 2)
+        }`
+      );
+    }
+  };
+
   static fetchAttributes = async (
     event: FlatfileEvent
   ): Promise<AttributeResult[]> => {
