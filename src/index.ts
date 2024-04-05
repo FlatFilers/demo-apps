@@ -1,12 +1,13 @@
-import { FlatfileListener } from '@flatfile/listener';
-import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure';
-import { ecommerceProjectSpaceConfigure } from './workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
-import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects';
-import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor';
-import { JSONExtractor } from '@flatfile/plugin-json-extractor';
-import { externalConstraints } from './shared/externalContraints/externalConstraints';
+import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
+import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
+import { externalConstraints } from '@/shared/externalContraints/externalConstraints';
+import { ecommerceProjectSpaceConfigure } from '@/workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
+import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
+import { plmProjectSpaceConfigure } from '@/workflows/plm/actions/plmProjectSpaceConfigure';
+import FlatfileListener from '@flatfile/listener';
 import { externalConstraint } from '@flatfile/plugin-constraints';
-import { handleSubmitData } from './shared/eventHandlers/handleSubmitData';
+import { JSONExtractor } from '@flatfile/plugin-json-extractor';
+import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor';
 
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
@@ -54,6 +55,7 @@ export default function (listener: FlatfileListener) {
 
   listener.namespace('space:servicesproject', (listener) => {
     configureNamespace(listener, 'space:servicesproject');
+    listener.use(filefeedAutomap());
   });
 
   // Add more namespace configurations as needed)

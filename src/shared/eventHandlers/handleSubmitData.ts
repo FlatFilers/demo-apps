@@ -1,7 +1,6 @@
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
-import invariant from 'ts-invariant';
-import axios from 'axios';
+import { ProductsShowApiService } from '../products-show-api-service';
 
 export const handleSubmitData =
   () =>
@@ -10,7 +9,7 @@ export const handleSubmitData =
       'job:ready',
       { job: 'workbook:submitAction' },
       async (event) => {
-        const { spaceId, jobId } = event.context;
+        const { jobId } = event.context;
 
         try {
           await api.jobs.ack(jobId, {
@@ -18,40 +17,20 @@ export const handleSubmitData =
             progress: 10,
           });
 
-          const apiBaseUrl = await event.secrets('API_BASE_URL');
-          invariant(apiBaseUrl, 'Missing API_BASE_URL in environment secrets');
+          await ProductsShowApiService.syncSpace(event);
 
-          const response = await axios.get(
-            `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-
-          if (response.status !== 200) {
-            throw new Error('Failed to submit data to webhook');
-          }
+          await api.jobs.complete(jobId, {
+            outcome: {
+              message: 'Data was successfully submitted.',
+            },
+          });
         } catch (error) {
-          console.log(
-            `Error calling webhook: ${
-              error.message || JSON.stringify(error, null, 2)
-            }`
-          );
-
           await api.jobs.fail(jobId, {
             outcome: {
               message: error,
             },
           });
         }
-
-        await api.jobs.complete(jobId, {
-          outcome: {
-            message: 'Data was successfully submitted.',
-          },
-        });
       }
     );
   };
