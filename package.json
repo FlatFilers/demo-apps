@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@everapi/freecurrencyapi-js": "^1.0.1",
     "@flatfile/api": "1.7.11",
     "@flatfile/listener": "1.0.1",
     "@flatfile/plugin-constraints": "^1.1.7",

@@ -1,88 +1,67 @@
-// plmValidations.ts
-import { FlatfileRecord } from '@flatfile/hooks'
+/**
+ * Integrates with Flatfile's import process to validate and convert monetary values
+ * to USD for records within the 'products' sheet. This function sets up a bulk record
+ * hook to process records in batches, leveraging the FreeCurrencyAPI to fetch current
+ * exchange rates for accurate currency conversion.
+ *
+ * IMPORTANT: The API key is hardcoded here for demonstration purposes. In a production environment,
+ * it's crucial to store sensitive information such as API keys in environment variables or
+ * a secure secrets management solution to prevent unauthorized access.
+ */
 
-// Exchange rates for various currencies
-const exchangeRates = {
-  USD: 1.0,
-  EUR: 0.91,
-  GBP: 0.8,
-  JPY: 139.8,
-  CAD: 1.34,
-  AUD: 1.49,
-  CHF: 0.89,
-  CNY: 7.12,
-  HKD: 7.85,
-  SGD: 1.34,
-}
+import { bulkRecordHook } from '@flatfile/plugin-record-hook'
+import { FlatfileListener } from '@flatfile/listener'
+import {
+  validateTotalValue,
+  calculateTotalValueUSD,
+} from '../validations/productsValidations'
+import FreeCurrencyAPI from '@everapi/freecurrencyapi-js'
+global.fetch = require('node-fetch') // Polyfills fetch in a Node.js environment for the FreeCurrencyAPI.
 
-// Constants for field names
-const CURRENCY_FIELD = 'currency'
-const PRICE_FIELD = 'price'
-const QUANTITY_FIELD = 'quantity'
-const TOTAL_VALUE_FIELD = 'total_value'
-const TOTAL_VALUE_USD_FIELD = 'total_value_usd'
+// Initialize the FreeCurrencyAPI client with an API key.
+// Note: Replace the API key with a secure retrieval method for production use.
+const freeCurrencyAPI = new FreeCurrencyAPI(
+  'fca_live_a3JDy4PACw4C3CbgCf35ZZlwYQjLZgfUGmJNLgmm'
+)
 
 /**
- * Validates and calculates the total value based on price and quantity.
- * @param record The FlatfileRecord object.
- * @returns The updated FlatfileRecord object with the total value set.
+ * Configures and applies validations and currency conversion to records processed by Flatfile.
+ * This function is specifically designed for the 'products' sheet and utilizes the FreeCurrencyAPI
+ * to fetch the latest exchange rates for currency conversion.
+ *
+ * @param {FlatfileListener} listener - The FlatfileListener instance to which the bulk record hook is attached.
  */
-export function validateTotalValue(record: FlatfileRecord): FlatfileRecord {
-  // Get the price and quantity values as strings
-  const priceString = record.get(PRICE_FIELD) as string | undefined
-  const quantityString = record.get(QUANTITY_FIELD) as string | undefined
+export async function plmValidations(listener: FlatfileListener) {
+  listener.use(
+    bulkRecordHook(
+      'products',
+      async (records) => {
+        let exchangeRates = {}
+        try {
+          // Fetches the latest exchange rates with USD as the base currency.
+          // This fetches rates for all available currencies by default.
+          const response = await freeCurrencyAPI.latest({
+            base_currency: 'USD',
+          })
+          exchangeRates = response.data // Assuming 'data' contains the rates.
+          console.log('Fetched exchange rates:', exchangeRates)
+        } catch (error) {
+          console.error('Error fetching exchange rates:', error)
+          // Error handling strategy could include aborting the operation or using fallback rates.
+          return // Exits the function due to the error.
+        }
 
-  // Convert the price and quantity strings to numbers
-  const price = priceString ? parseFloat(priceString) : undefined
-  const quantity = quantityString ? parseFloat(quantityString) : undefined
-
-  // Check if price and quantity are valid numbers
-  if (!isNaN(price) && !isNaN(quantity)) {
-    // Calculate the total value
-    const totalValue = price * quantity
-    // Set the total value in the record
-    record.set(TOTAL_VALUE_FIELD, totalValue)
-  }
-
-  return record
-}
-
-/**
- * Calculates the total value in USD based on the total value and currency.
- * @param record The FlatfileRecord object.
- * @returns The updated FlatfileRecord object with the total value in USD set.
- */
-export function calculateTotalValueUSD(record: FlatfileRecord): FlatfileRecord {
-  // Get the total value and currency from the record
-  const totalValue = record.get(TOTAL_VALUE_FIELD) as number | undefined
-  const currency = record.get(CURRENCY_FIELD) as string | undefined
-
-  // Check if total value is a number and currency is a string
-  if (typeof totalValue === 'number' && typeof currency === 'string') {
-    // Get the exchange rate based on the currency
-    const exchangeRate = exchangeRates[currency]
-
-    // Check if the exchange rate exists
-    if (exchangeRate) {
-      // Calculate the total value in USD
-      const totalValueUSD = exchangeRate !== 0 ? totalValue / exchangeRate : 0
-      // Round the total value in USD to two decimal places
-      const roundedTotalValueUSD = Math.round(totalValueUSD * 100) / 100
-      // Format the rounded value to always have two decimal places
-      const formattedTotalValueUSD = roundedTotalValueUSD.toFixed(2)
-      // Set the formatted total value in USD in the record
-      record.set(TOTAL_VALUE_USD_FIELD, parseFloat(formattedTotalValueUSD))
-
-      // Check if the original total value in USD is different from the rounded value
-      if (totalValueUSD !== roundedTotalValueUSD) {
-        // Add an info message to the record indicating the rounding
-        record.addInfo(
-          TOTAL_VALUE_USD_FIELD,
-          `The total value in USD has been rounded to two decimal places. Original value: ${totalValueUSD}`
-        )
+        // Processes each record, applying validations and currency conversions using the fetched rates.
+        return records.map((record) => {
+          validateTotalValue(record) // Validates the total value based on price and quantity.
+          calculateTotalValueUSD(record, exchangeRates) // Converts and sets the total value in USD.
+          return record // Returns the updated record.
+        })
+      },
+      {
+        chunkSize: 100, // Defines the number of records to process in each batch.
+        parallel: 2, // Specifies the number of batches to process in parallel.
       }
-    }
-  }
-
-  return record
+    )
+  )
 }
