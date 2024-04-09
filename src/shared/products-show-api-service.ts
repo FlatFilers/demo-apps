@@ -74,6 +74,36 @@ export class ProductsShowApiService {
     return attributes;
   };
 
+  static sendFilefeedEvent = async (event: FlatfileEvent) => {
+    console.log('Sending filefeed event to products.show.');
+
+    const { spaceId } = event.context;
+    const topic = event.payload.job || event.topic;
+
+    if (!topic) {
+      return;
+    }
+
+    const apiBaseUrl = await event.secrets('API_BASE_URL');
+    const url = `${apiBaseUrl}/api/webhook/filefeed-event`;
+
+    let response;
+
+    try {
+      response = await axios.post(
+        url,
+        { spaceId, topic },
+        { headers: await this.headers(event) }
+      );
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to send filefeed event: ${error.message}`);
+    }
+  };
+
   private static headers = async (event: FlatfileEvent) => {
     const listenerAuthToken = await event.secrets('LISTENER_AUTH_TOKEN');
     invariant(

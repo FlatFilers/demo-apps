@@ -1,6 +1,7 @@
 import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
 import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
 import { externalConstraints } from '@/shared/externalContraints/externalConstraints';
+import { ProductsShowApiService } from '@/shared/products-show-api-service';
 import { ecommerceProjectSpaceConfigure } from '@/workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
 import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
 import { plmProjectSpaceConfigure } from '@/workflows/plm/actions/plmProjectSpaceConfigure';
@@ -56,6 +57,17 @@ export default function (listener: FlatfileListener) {
   listener.namespace('space:servicesproject', (listener) => {
     configureNamespace(listener, 'space:servicesproject');
     listener.use(filefeedAutomap());
+
+    listener.on('**', (event) => {
+      // Send certain filefeed events to products.show
+      if (
+        event.topic.includes('records:') ||
+        (event.topic === 'job:completed' &&
+          event?.payload?.status === 'complete')
+      ) {
+        ProductsShowApiService.sendFilefeedEvent(event);
+      }
+    });
   });
 
   // Add more namespace configurations as needed)
