@@ -25,6 +25,19 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
     listener.use(JSONExtractor());
     listener.use(handleSubmitData());
 
+    listener.use(filefeedAutomap());
+
+    listener.on('**', (event) => {
+      // Send certain filefeed events to products.show
+      if (
+        event.topic.includes('records:') ||
+        (event.topic === 'job:completed' &&
+          event?.payload?.status === 'complete')
+      ) {
+        ProductsShowApiService.sendFilefeedEvent(event);
+      }
+    });
+
     // Apply external constraints
     Object.entries(externalConstraints).forEach(
       ([constraintName, constraint]) => {
@@ -56,18 +69,6 @@ export default function (listener: FlatfileListener) {
 
   listener.namespace('space:servicesproject', (listener) => {
     configureNamespace(listener, 'space:servicesproject');
-    listener.use(filefeedAutomap());
-
-    listener.on('**', (event) => {
-      // Send certain filefeed events to products.show
-      if (
-        event.topic.includes('records:') ||
-        (event.topic === 'job:completed' &&
-          event?.payload?.status === 'complete')
-      ) {
-        ProductsShowApiService.sendFilefeedEvent(event);
-      }
-    });
   });
 
   // Add more namespace configurations as needed)

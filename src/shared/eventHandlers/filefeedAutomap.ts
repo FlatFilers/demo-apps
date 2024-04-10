@@ -2,8 +2,8 @@ import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
 import { PipelineJobConfig } from '@flatfile/api/api';
 import { automap } from '@flatfile/plugin-automap';
-import { WORK_ORDERS_SHEET_NAME } from '@/workflows/fieldServices/blueprints/workOrders';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
+import { PRODUCTS_SHEET_NAME } from '@/workflows/plm/blueprints/products';
 
 export const filefeedAutomap =
   () =>
@@ -11,8 +11,8 @@ export const filefeedAutomap =
     listener.use(
       automap({
         accuracy: 'confident',
-        matchFilename: /^workorders.*$/i,
-        defaultTargetSheet: WORK_ORDERS_SHEET_NAME,
+        matchFilename: /^products-sample-data.*$/i,
+        defaultTargetSheet: PRODUCTS_SHEET_NAME,
       })
     );
 
