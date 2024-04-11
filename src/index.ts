@@ -1,19 +1,20 @@
-
-import { FlatfileListener } from '@flatfile/listener'
-import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure'
-import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects'
-import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor'
-import { JSONExtractor } from '@flatfile/plugin-json-extractor'
-import { externalConstraints } from './shared/externalContraints/externalConstraints'
-import { externalConstraint } from '@flatfile/plugin-constraints'
-import { validations } from './shared/validations/validations'
+import { FlatfileListener } from '@flatfile/listener';
+import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure';
+import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects';
+import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor';
+import { JSONExtractor } from '@flatfile/plugin-json-extractor';
+import { externalConstraints } from './shared/externalContraints/externalConstraints';
+import { externalConstraint } from '@flatfile/plugin-constraints';
+import { validations } from './shared/validations/validations';
 import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
 import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
+import { plmEmbeddedSpaceConfigure } from './workflows/plm/actions/plmEmbeddedSpaceConfigure';
 
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
   'space:servicesproject': fieldServicesProjectSpaceConfigure,
+  'space:plmembedded': plmEmbeddedSpaceConfigure,
   // Add more namespace configurations as needed
 };
 
@@ -48,7 +49,7 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
     console.warn(`No configuration found for namespace: ${namespace}`);
   }
   // Apply Bulk Record Hook Validations
-  listener.use(validations)
+  listener.use(validations);
 }
 
 export default function (listener: FlatfileListener) {
@@ -63,6 +64,11 @@ export default function (listener: FlatfileListener) {
   // Configure each namespace explicitly
   listener.namespace('space:plmproject', (listener) => {
     configureNamespace(listener, 'space:plmproject');
+  });
+
+  // Configure each namespace explicitly
+  listener.namespace('space:plmembedded', (listener) => {
+    configureNamespace(listener, 'space:plmembedded');
   });
 
   listener.namespace('space:servicesproject', (listener) => {
