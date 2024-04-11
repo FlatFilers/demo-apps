@@ -1,6 +1,32 @@
 import { PhoneNumberUtil } from 'google-libphonenumber'
+import { parse, isValid, format } from 'date-fns'
 
 const phoneUtil = PhoneNumberUtil.getInstance()
+
+// Function to format a date string based on the specified format
+function formatDate(dateString, outputFormat) {
+  const inputFormats = [
+    'yyyy-MM-dd',
+    'MM/dd/yyyy',
+    'dd/MM/yyyy',
+    'yyyy/MM/dd',
+    // Add more input formats as needed
+  ]
+
+  let parsedDate = null
+
+  // Iterate through the input formats and try to parse the date string
+  for (const inputFormat of inputFormats) {
+    parsedDate = parse(dateString, inputFormat, new Date())
+    if (isValid(parsedDate)) {
+      // If the date string is successfully parsed, format it using the specified output format
+      return format(parsedDate, outputFormat)
+    }
+  }
+
+  // If none of the input formats match, return 'Invalid Date'
+  return 'Invalid Date'
+}
 
 export const externalConstraints = {
   length: {
@@ -55,28 +81,24 @@ export const externalConstraints = {
   date: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        // Convert format string to regex pattern
-        const formatToRegex = (format) => {
-          const escapeRegExp = (string) =>
-            string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          let pattern = escapeRegExp(format)
-            .replace(/YYYY/g, '(\\d{4})')
-            .replace(/MM/g, '(0[1-9]|1[0-2])')
-            .replace(/DD/g, '(0[1-9]|[12][0-9]|3[01])')
-          return new RegExp(`^${pattern}$`)
-        }
+        const dateFormat = config.format || 'yyyy-MM-dd' // Use the format from config or default to 'yyyy-MM-dd'
 
-        const dateRegex = formatToRegex(config.format)
-        if (!dateRegex.test(value)) {
+        // Format the date string using the helper function formatDate and the specified format
+        const formattedDate = formatDate(value.trim(), dateFormat)
+
+        // If the formatted date is invalid, add an error to the record
+        if (formattedDate === 'Invalid Date') {
           record.addError(
             key,
-            `Invalid date format. Expected format: ${config.format}.`
+            `Please check that the date is in the format: ${dateFormat}`
           )
         } else {
-          // Simple check to ensure the date is valid. More complex validation might be needed for specific cases.
-          const date = new Date(value)
-          if (isNaN(date.getTime())) {
-            record.addError(key, `Invalid date value.`)
+          // Update the record with the formatted date
+          record.set(key, formattedDate)
+
+          // Add a comment only if the formatted date is different from the original value
+          if (formattedDate !== value.trim()) {
+            record.addComment(key, `Date has been formatted as ${dateFormat}`)
           }
         }
       }
@@ -96,27 +118,28 @@ export const externalConstraints = {
   dateRange: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        // Convert format string to regex pattern
-        const formatToRegex = (format) => {
-          const escapeRegExp = (string) =>
-            string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          let pattern = escapeRegExp(format)
-            .replace(/YYYY/g, '(\\d{4})')
-            .replace(/MM/g, '(0[1-9]|1[0-2])')
-            .replace(/DD/g, '(0[1-9]|[12][0-9]|3[01])')
-          return new RegExp(`^${pattern}$`)
-        }
+        const dateFormat = config.format || 'yyyy-MM-dd' // Use the format from config or default to 'yyyy-MM-dd'
 
-        const dateRegex = formatToRegex(config.format || 'YYYY-MM-DD') // Default to 'YYYY-MM-DD' if no format is provided
-        if (!dateRegex.test(value)) {
+        // Format the date string using the helper function formatDate and the specified format
+        const formattedDate = formatDate(value.trim(), dateFormat)
+
+        // If the formatted date is invalid, add an error to the record
+        if (formattedDate === 'Invalid Date') {
           record.addError(
             key,
-            `Invalid date format. Expected format: ${
-              config.format || 'YYYY-MM-DD'
-            }.`
+            `Please check that the date is in the format: ${dateFormat}`
           )
         } else {
-          const date = new Date(value)
+          // Update the record with the formatted date
+          record.set(key, formattedDate)
+
+          // Add a comment only if the formatted date is different from the original value
+          if (formattedDate !== value.trim()) {
+            record.addComment(key, `Date has been formatted as ${dateFormat}`)
+          }
+
+          // Check if the date is within the specified range
+          const date = new Date(formattedDate)
           const minDate = config.min ? new Date(config.min) : null
           const maxDate = config.max ? new Date(config.max) : null
           if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
@@ -152,7 +175,7 @@ export const externalConstraints = {
         if (!dateTimeRegex.test(value)) {
           record.addError(
             key,
-            'Invalid date/time format. Expected format: YYYY-MM-DDTHH:mm:ss.'
+            'Invalid date/time format. Expected format: yyyy-MM-ddTHH:mm:ss.'
           )
         } else {
           const dateTime = new Date(value)
@@ -169,6 +192,46 @@ export const externalConstraints = {
               }.`
             )
           }
+        }
+      }
+    },
+  },
+  boolean: {
+    validator: (value, key, { record }) => {
+      if (value) {
+        // Define the commonly used synonyms for boolean values
+        const synonyms = {
+          true: true,
+          yes: true,
+          y: true,
+          on: true,
+          1: true,
+          false: false,
+          no: false,
+          n: false,
+          off: false,
+          0: false,
+        }
+
+        // Get the value of the boolean field from the record
+        let fieldValue = value
+
+        // Check if the value is a string and is present in the synonyms object
+        if (
+          typeof fieldValue === 'string' &&
+          fieldValue.toLowerCase() in synonyms
+        ) {
+          // Map the synonym to its corresponding boolean value
+          const mappedValue = synonyms[fieldValue.toLowerCase()]
+
+          // Set the mapped value back to the record
+          record.set(key, mappedValue)
+
+          // Add an info message indicating the mapping
+          record.addInfo(key, `Value "${fieldValue}" mapped to ${mappedValue}`)
+        } else if (typeof fieldValue !== 'boolean') {
+          // If the value is not a boolean and not a valid synonym, add an error to the record
+          record.addError(key, 'This field must be a boolean')
         }
       }
     },

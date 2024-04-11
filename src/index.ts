@@ -1,21 +1,20 @@
+import { FlatfileListener } from '@flatfile/listener';
+import { plmProjectSpaceConfigure } from './workflows/plm/actions/plmProjectSpaceConfigure';
+import { fieldServicesProjectSpaceConfigure } from './workflows/fieldServices/actions/fieldServicesProjects';
+import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor';
+import { JSONExtractor } from '@flatfile/plugin-json-extractor';
+import { externalConstraints } from './shared/externalContraints/externalConstraints';
+import { externalConstraint } from '@flatfile/plugin-constraints';
+import { validations } from './shared/validations/validations';
 import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
 import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
-import { externalConstraints } from '@/shared/externalContraints/externalConstraints';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
-import { ecommerceProjectSpaceConfigure } from '@/workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
-import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
-import { plmProjectSpaceConfigure } from '@/workflows/plm/actions/plmProjectSpaceConfigure';
-import FlatfileListener from '@flatfile/listener';
-import { externalConstraint } from '@flatfile/plugin-constraints';
-import { JSONExtractor } from '@flatfile/plugin-json-extractor';
-import { ExcelExtractor } from '@flatfile/plugin-xlsx-extractor';
-import api from '@flatfile/api';
 import { RecordHook } from '@flatfile/plugin-record-hook';
 import { productValidations } from '@/workflows/plm/recordHooks/products/productValidations';
+import api from '@flatfile/api';
 
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
-  'space:ecommerceproject': ecommerceProjectSpaceConfigure,
   'space:servicesproject': fieldServicesProjectSpaceConfigure,
   // Add more namespace configurations as needed
 };
@@ -50,6 +49,8 @@ function configureNamespace(listener: FlatfileListener, namespace: string) {
   } else {
     console.warn(`No configuration found for namespace: ${namespace}`);
   }
+  // Apply Bulk Record Hook Validations
+  listener.use(validations);
 }
 
 export default function (listener: FlatfileListener) {
@@ -133,10 +134,6 @@ export default function (listener: FlatfileListener) {
         console.error('Error in commit:created event handler:', error);
       }
     });
-  });
-
-  listener.namespace('space:ecommerceproject', (listener) => {
-    configureNamespace(listener, 'space:ecommerceproject');
   });
 
   listener.namespace('space:servicesproject', (listener) => {

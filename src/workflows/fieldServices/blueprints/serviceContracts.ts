@@ -34,7 +34,7 @@ export const serviceContracts: SheetConfig = {
         {
           type: 'external',
           validator: 'dateRange',
-          config: { max: '2100-12-31', format: 'YYYY-MM-DD' },
+          config: { max: '2100-12-31', format: 'yyyy-MM-dd' },
         },
       ],
     },
@@ -47,7 +47,7 @@ export const serviceContracts: SheetConfig = {
         {
           type: 'external',
           validator: 'dateRange',
-          config: { min: '2000-01-01', format: 'YYYY-MM-DD' },
+          config: { min: '2000-01-01', format: 'yyyy-MM-dd' },
         },
       ],
     },
