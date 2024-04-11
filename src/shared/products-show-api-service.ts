@@ -14,7 +14,7 @@ type ProductResult = {
   name: string;
   description: string;
   categoryId: string;
-  Price: number;
+  price: number;
   quantity: number;
   imageUrl?: string;
   supplierId: string;
