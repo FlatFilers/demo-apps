@@ -71,6 +71,63 @@ export const products: SheetConfig = {
         },
       ],
     },
+
+    {
+      key: 'currency',
+      label: 'Currency',
+      type: 'enum',
+      description: 'Currency used for the total monetary value of the product',
+      config: {
+        options: [
+          { value: 'USD', label: 'US Dollar' },
+          { value: 'EUR', label: 'Euro' },
+          { value: 'GBP', label: 'British Pound' },
+          { value: 'JPY', label: 'Japanese Yen' },
+          { value: 'CAD', label: 'Canadian Dollar' },
+          { value: 'AUD', label: 'Australian Dollar' },
+          { value: 'CHF', label: 'Swiss Franc' },
+          { value: 'CNY', label: 'Chinese Yuan' },
+          { value: 'HKD', label: 'Hong Kong Dollar' },
+          { value: 'SGD', label: 'Singapore Dollar' },
+        ],
+      },
+      constraints: [{ type: 'required' }],
+    },
+
+    {
+      key: 'total_value',
+      label: 'Total Value',
+      type: 'number',
+      description:
+        'Total monetary value of the product (price × quantity) in provided currency',
+      readonly: true,
+      constraints: [
+        { type: 'computed' },
+        {
+          type: 'external',
+          validator: 'numberRange',
+          config: { min: 0, max: 1000000 },
+        },
+      ],
+    },
+
+    {
+      key: 'total_value_usd',
+      label: 'Total Value USD',
+      type: 'number',
+      description:
+        'Total monetary value of the product (price × quantity) in provided currency',
+      readonly: true,
+      constraints: [
+        { type: 'computed' },
+        {
+          type: 'external',
+          validator: 'numberRange',
+          config: { min: 0, max: 1000000 },
+        },
+      ],
+    },
+
     {
       key: 'image_url',
       label: 'Image URL',
@@ -98,6 +155,44 @@ export const products: SheetConfig = {
         key: 'attribute_id',
         relationship: 'has-many',
       },
+    },
+    {
+      key: 'is_active',
+      label: 'Is Active',
+      type: 'boolean',
+      description: 'Indicates if the product is currently active',
+      constraints: [
+        { type: 'required' },
+        { type: 'external', validator: 'boolean' },
+      ],
+    },
+    {
+      key: 'created_at',
+      label: 'Created At',
+      type: 'date',
+      description: 'The date when the product was created',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
+      ],
+    },
+    {
+      key: 'updated_at',
+      label: 'Updated At',
+      type: 'date',
+      description: 'The date when the product was last updated',
+      constraints: [
+        { type: 'required' },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
+      ],
     },
   ],
 };
