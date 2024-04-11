@@ -1,4 +1,4 @@
-import { SheetConfig } from '@flatfile/api/api'
+import { SheetConfig } from '@flatfile/api/api';
 
 export const workOrders: SheetConfig = {
   name: 'Work Orders',
@@ -129,4 +129,4 @@ export const workOrders: SheetConfig = {
       ],
     },
   ],
-}
+};

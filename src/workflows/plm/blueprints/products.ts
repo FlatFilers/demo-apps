@@ -1,7 +1,9 @@
-import { SheetConfig } from '@flatfile/api/api'
+import { SheetConfig } from '@flatfile/api/api';
+
+export const PRODUCTS_SHEET_NAME = 'Products';
 
 export const products: SheetConfig = {
-  name: 'Products',
+  name: PRODUCTS_SHEET_NAME,
   description: 'A list of products',
   slug: 'products',
   fields: [
@@ -193,4 +195,4 @@ export const products: SheetConfig = {
       ],
     },
   ],
-}
+};

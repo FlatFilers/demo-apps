@@ -1,6 +1,6 @@
-import { configureSpace } from '@flatfile/plugin-space-configure'
-import * as fieldServicesBlueprints from '../blueprints/_index'
-import { FlatfileListener } from '@flatfile/listener'
+import { configureSpace } from '@flatfile/plugin-space-configure';
+import * as fieldServicesBlueprints from '../blueprints/_index';
+import { FlatfileListener } from '@flatfile/listener';
 
 export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
@@ -37,5 +37,5 @@ export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
         },
       ],
     })
-  )
+  );
 }
