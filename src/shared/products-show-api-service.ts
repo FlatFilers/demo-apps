@@ -9,6 +9,18 @@ type AttributeResult = {
   unit?: string;
 };
 
+type ProductResult = {
+  externalId: string;
+  name: string;
+  description: string;
+  categoryId: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string;
+  supplierId: string;
+  attributes?: AttributeResult[];
+};
+
 type SyncedRecordsResponse = {
   syncedFlatfileRecordIds: string[];
 };
@@ -116,5 +128,33 @@ export class ProductsShowApiService {
       'x-listener-auth': listenerAuthToken,
       'x-space-id': event.context.spaceId,
     };
+  };
+
+  static fetchProducts = async (event: FlatfileEvent) => {
+    console.log('Fetching products from plm.show');
+
+    const apiBaseUrl = await event.secrets('API_BASE_URL');
+    const url = `${apiBaseUrl}/api/v1/products`;
+
+    let response;
+
+    try {
+      response = await axios.get(url, {
+        headers: await this.headers(event),
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to fetch products: ${error.message}`);
+      response = [];
+    }
+
+    const products = response.data.products as ProductResult[];
+
+    console.log('Products found: ' + JSON.stringify(products));
+
+    return products;
   };
 }
