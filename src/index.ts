@@ -9,6 +9,9 @@ import { validations } from './shared/validations/validations';
 import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
 import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
+import { plmEmbeddedSpaceConfigure } from './workflows/plm/actions/plmEmbeddedSpaceConfigure';
+import { plmFileFeedSpaceConfigure } from './workflows/plm/actions/plmFileFeedSpaceConfigure';
+import { plmDynamicSpaceConfigure } from './workflows/plm/actions/plmDynamicSpaceConfigure';
 import { RecordHook } from '@flatfile/plugin-record-hook';
 import { productValidations } from '@/workflows/plm/recordHooks/products/productValidations';
 import api from '@flatfile/api';
@@ -16,6 +19,9 @@ import api from '@flatfile/api';
 const namespaceConfigs = {
   'space:plmproject': plmProjectSpaceConfigure,
   'space:servicesproject': fieldServicesProjectSpaceConfigure,
+  'space:plmembedded': plmEmbeddedSpaceConfigure,
+  'space:plmfilefeed': plmFileFeedSpaceConfigure,
+  'space:plmdynamic': plmDynamicSpaceConfigure,
   // Add more namespace configurations as needed
 };
 
@@ -134,6 +140,18 @@ export default function (listener: FlatfileListener) {
         console.error('Error in commit:created event handler:', error);
       }
     });
+  });
+
+  listener.namespace('space:plmembedded', (listener) => {
+    configureNamespace(listener, 'space:plmembedded');
+  });
+
+  listener.namespace('space:plmfilefeed', (listener) => {
+    configureNamespace(listener, 'space:plmfilefeed');
+  });
+
+  listener.namespace('space:plmdynamic', (listener) => {
+    configureNamespace(listener, 'space:plmdynamic');
   });
 
   listener.namespace('space:servicesproject', (listener) => {
