@@ -11,37 +11,22 @@ import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
 import { plmEmbeddedSpaceConfigure } from './workflows/plm/actions/plmEmbeddedSpaceConfigure';
 import { plmFileFeedSpaceConfigure } from './workflows/plm/actions/plmFileFeedSpaceConfigure';
-// import { plmDynamicSpaceConfigure } from './workflows/plm/actions/plmDynamicSpaceConfigure';
 import { RecordHook } from '@flatfile/plugin-record-hook';
 import { productValidations } from '@/workflows/plm/recordHooks/products/productValidations';
 import api from '@flatfile/api';
 
-const namespaceConfigs = {
-  'space:plmproject': plmProjectSpaceConfigure,
-  'space:servicesproject': fieldServicesProjectSpaceConfigure,
-  'space:plmembedded': plmEmbeddedSpaceConfigure,
-  'space:plmfilefeed': plmFileFeedSpaceConfigure,
-  // 'space:plmdynamic': plmDynamicSpaceConfigure,
-  // Add more namespace configurations as needed
-};
+function configureSharedUses(listener: FlatfileListener) {
+  listener.use(ExcelExtractor());
+  listener.use(JSONExtractor());
+  listener.use(handleSubmitData());
 
-function configureNamespace(listener: FlatfileListener, namespace: string) {
-  const spaceConfigureFunction = namespaceConfigs[namespace];
-  if (spaceConfigureFunction) {
-    listener.use(spaceConfigureFunction);
-    listener.use(ExcelExtractor());
-    listener.use(JSONExtractor());
-    listener.use(handleSubmitData());
+  // Apply external constraints
+  Object.entries(externalConstraints).forEach(
+    ([constraintName, constraint]) => {
+      listener.use(externalConstraint(constraintName, constraint.validator));
+    }
+  );
 
-    // Apply external constraints
-    Object.entries(externalConstraints).forEach(
-      ([constraintName, constraint]) => {
-        listener.use(externalConstraint(constraintName, constraint.validator));
-      }
-    );
-  } else {
-    console.warn(`No configuration found for namespace: ${namespace}`);
-  }
   // Apply Bulk Record Hook Validations
   listener.use(validations);
 }
@@ -57,7 +42,8 @@ export default function (listener: FlatfileListener) {
 
   // Configure each namespace explicitly
   listener.namespace('space:plmproject', (listener) => {
-    configureNamespace(listener, 'space:plmproject');
+    listener.use(plmProjectSpaceConfigure);
+    configureSharedUses(listener);
 
     // Products hook to check for existing products
     listener.on('commit:created', async (event) => {
@@ -130,11 +116,13 @@ export default function (listener: FlatfileListener) {
   });
 
   listener.namespace('space:plmembedded', (listener) => {
-    configureNamespace(listener, 'space:plmembedded');
+    listener.use(plmEmbeddedSpaceConfigure);
+    configureSharedUses(listener);
   });
 
   listener.namespace('space:plmfilefeed', (listener) => {
-    configureNamespace(listener, 'space:plmfilefeed');
+    listener.use(plmFileFeedSpaceConfigure);
+    configureSharedUses(listener);
 
     listener.use(filefeedAutomap());
 
@@ -152,11 +140,11 @@ export default function (listener: FlatfileListener) {
 
   // Note: This listener is running in-browser in the plm.show app.
   // listener.namespace('space:plmdynamic', (listener) => {
-  //   configureNamespace(listener, 'space:plmdynamic');
   // });
 
   listener.namespace('space:servicesproject', (listener) => {
-    configureNamespace(listener, 'space:servicesproject');
+    listener.use(fieldServicesProjectSpaceConfigure);
+    configureSharedUses(listener);
   });
 
   // Add more namespace configurations as needed)
