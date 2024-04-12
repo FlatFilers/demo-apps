@@ -6,7 +6,7 @@ import { modifySheet } from '../../../shared/helpers/modifySheet';
 const WORKBOOK_NAME = 'PLM Import';
 const modifiedProducts = modifySheet(plmBlueprints.products);
 
-export function plmEmbeddedSpaceConfigure(listener: FlatfileListener) {
+export function plmFileFeedSpaceConfigure(listener: FlatfileListener) {
   listener.use(
     configureSpace({
       space: {
