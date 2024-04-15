@@ -13,7 +13,12 @@ const WORKBOOK_NAME = 'PLM Import';
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
     configureSpace({
-      space: {},
+      space: {
+        metadata: {
+          theme: projectSpaceTheme,
+        },
+      },
+      documents: [projectSpaceDocument],
       workbooks: [
         {
           name: WORKBOOK_NAME,
@@ -37,37 +42,6 @@ export function plmProjectSpaceConfigure(listener: FlatfileListener) {
       ],
     })
   );
-
-  // Create document and set theme for the space
-  listener.on('space:created', async ({ context: { spaceId } }) => {
-    const document = projectSpaceDocument;
-    const theme = projectSpaceTheme;
-
-    let createDocument;
-    try {
-      createDocument = await api.documents.create(spaceId, document);
-    } catch (error) {
-      console.error('Error creating document:', error.message);
-      throw error;
-    }
-
-    try {
-      await api.spaces.update(spaceId, {
-        metadata: {
-          sidebarConfig: {
-            showSidebar: true,
-            defaultPage: {
-              documentId: createDocument.data.id,
-            },
-          },
-          theme,
-        },
-      });
-    } catch (error) {
-      console.error('Error updating space:', error.message);
-      throw error;
-    }
-  });
 
   // Seed the workbook with data
   listener.on('workbook:created', async (event) => {
