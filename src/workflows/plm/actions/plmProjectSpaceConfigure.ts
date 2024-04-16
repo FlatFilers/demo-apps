@@ -12,35 +12,52 @@ const WORKBOOK_NAME = 'PLM Import';
 
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
-    configureSpace({
-      space: {
-        metadata: {
-          theme: projectSpaceTheme,
-        },
+    configureSpace(
+      {
+        documents: [projectSpaceDocument],
+        workbooks: [
+          {
+            name: WORKBOOK_NAME,
+            namespace: 'plmImport',
+            sheets: [
+              plmBlueprints.attributes,
+              plmBlueprints.suppliers,
+              plmBlueprints.categories,
+              plmBlueprints.products,
+            ],
+            actions: [
+              {
+                operation: 'submitAction',
+                mode: 'foreground',
+                constraints: [{ type: 'hasData' }],
+                label: 'Submit Data',
+                primary: true,
+              },
+            ],
+          },
+        ],
       },
-      documents: [projectSpaceDocument],
-      workbooks: [
-        {
-          name: WORKBOOK_NAME,
-          namespace: 'plmImport',
-          sheets: [
-            plmBlueprints.attributes,
-            plmBlueprints.suppliers,
-            plmBlueprints.categories,
-            plmBlueprints.products,
-          ],
-          actions: [
-            {
-              operation: 'submitAction',
-              mode: 'foreground',
-              constraints: [{ type: 'hasData' }],
-              label: 'Submit Data',
-              primary: true,
+      async (event) => {
+        const { spaceId } = event.context;
+        const documents = await api.documents.list(spaceId);
+
+        // Get the first documentId
+        const documentId = documents.data[0]['id'];
+
+        // Update the space adding theme and setting the documentId as the default page
+        await api.spaces.update(spaceId, {
+          metadata: {
+            sidebarConfig: {
+              showSidebar: true,
+              defaultPage: {
+                documentId,
+              },
             },
-          ],
-        },
-      ],
-    })
+            theme: projectSpaceTheme,
+          },
+        });
+      }
+    )
   );
 
   // Seed the workbook with data
