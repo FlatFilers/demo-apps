@@ -36,7 +36,8 @@ export function plmFileFeedSpaceConfigure(listener: FlatfileListener) {
         const documents = await api.documents.list(spaceId);
 
         // Get the first documentId
-        const documentId = documents.data[0]['id'];
+        const documentId =
+          documents.data.length > 0 ? documents.data[0]['id'] : null;
 
         // Update the space adding theme and setting the documentId as the default page
         await api.spaces.update(spaceId, {
