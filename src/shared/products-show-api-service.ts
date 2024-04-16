@@ -10,7 +10,7 @@ type AttributeResult = {
 };
 
 type ProductResult = {
-  externalId: string;
+  externalProductId: string;
   name: string;
   description: string;
   categoryId: string;
