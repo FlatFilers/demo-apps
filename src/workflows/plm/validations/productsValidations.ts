@@ -2,7 +2,9 @@
  * A module for handling currency validations and conversions in records processed by Flatfile.
  */
 
+import { ProductsShowApiService } from '@/shared/products-show-api-service'
 import { FlatfileRecord } from '@flatfile/hooks'
+import { FlatfileEvent } from '@flatfile/listener'
 
 // Field names used in FlatfileRecord for accessing and setting record data.
 const FIELDS = {
@@ -84,4 +86,44 @@ export function calculateTotalValueUSD(
   }
 
   return record
+}
+
+export async function checkApiForExistingProducts(
+  records: FlatfileRecord[],
+  event: FlatfileEvent,
+): Promise<FlatfileRecord> {
+  const products = await ProductsShowApiService.fetchProducts(event);
+
+  if (!products) {
+    console.log('Failed to fetch products data from the API');
+    return;
+  }
+
+  records.map((record: FlatfileRecord) => {
+    try {
+      // Get the current value of the product_id field
+      let productId = record.get('product_id');
+      console.log('product_id:', productId); // Log the current value of product_id
+
+      // Check if the product_id matches an id from the API data
+      const matchingProduct = products.find((product) => {
+        return String(product.externalProductId) === String(productId); // Convert both to strings for comparison
+      });
+
+      // If a match is found, add an error to the product_id field
+      if (matchingProduct) {
+        console.log('Match found, adding error to product_id field');
+        record.addError(
+          'product_id',
+          'Product ID matches an existing ID in PLM application.'
+        );
+      }
+    } catch (error) {
+      console.log('Error occurred during API check:', error); // Log any errors that occurred during the check
+      // If an error occurred during the check, add an error to the product_id field
+      record.addError('product_id', "Couldn't process data from the API.");
+    }
+
+    return record;
+  });
 }

@@ -14,6 +14,7 @@ import { FlatfileListener } from "@flatfile/listener";
 import {
   validateTotalValue,
   calculateTotalValueUSD,
+  checkApiForExistingProducts,
 } from "../validations/productsValidations";
 import FreeCurrencyAPI from "@everapi/freecurrencyapi-js";
 
@@ -29,6 +30,8 @@ export async function plmValidations(listener: FlatfileListener) {
     bulkRecordHook(
       "products",
       async (records, event) => {
+        await checkApiForExistingProducts(records, event); // Checks if the product_id exists in the API data
+
         let freeCurrencyAPI;
         try {
           // Retrieves the API key securely from the Flatfile environment secrets
