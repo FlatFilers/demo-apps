@@ -67,7 +67,7 @@ export const fileFeedSpaceDocument = {
   <div class="left">
   <div style="margin-bottom: 36px;">
   <h1>Welcome!</h1>
-  <p style="font-weight: 600;">We're excited to offer you a seamless, one-click experience for loading your data into HCM Show.</p>
+  <p style="font-weight: 600;">We're excited to offer you a seamless, one-click experience for loading your data into PLM Show.</p>
   </div>
   
   <div>
@@ -81,18 +81,18 @@ export const fileFeedSpaceDocument = {
   </div>
   
   <div class="box">
-  <h2>2. Examine the Imported Benefit Elections Data</h2>
-  <p>Click on the "Benefit Elections" workbook in the left-hand sidebar. This will display the data the remaining invalid values from the Google Drive file.</p>
+  <h2>2. Examine the Imported Products Data</h2>
+  <p>Click on the "Products" workbook in the left-hand sidebar. This will display the data the remaining invalid values from the Google Drive file.</p>
   </div>
   
   <div class="box">
-  <h2>3. Confirm the Data Load into HCM.Show</h2>
-  <p>As part of this process, we've automatically uploaded a file, mapped the data, and loaded all valid records into HCM Show.</p>
+  <h2>3. Confirm the Data Load into PLM.Show</h2>
+  <p>As part of this process, we've automatically uploaded a file, mapped the data, and loaded all valid records into PLM Show.</p>
   </div>
   
   <div class="box">
-  <h2>4. Return to HCM.Show</h2>
-  <p>Once you have inspected the files and data in Flatfile, return to HCM.Show. Navigate to the Data Templates section within the application to view the benefit elections data that was just loaded.</p>
+  <h2>4. Return to PLM.Show</h2>
+  <p>Once you have inspected the files and data in Flatfile, return to PLM.Show. Navigate to the Data Templates section within the application to view the products data that was just loaded.</p>
   </div>
   
   <!-- left -->
@@ -139,7 +139,7 @@ export const fileFeedSpaceDocument = {
   
   <div>
   <p style="margin-bottom: 8px;">View the code for this workflow on Github</p>
-  <a href="https://github.com/FlatFilers/hcm-show-config/blob/main/workflows/filefeed/index.ts" target="_blank" style="display: inline-flex; align-items: center; color: white; text-decoration: none; background-color: #000; padding: 16px 24px;">View on Github
+  <a href="https://github.com/FlatFilers/demo-apps/blob/main/src/workflows/plm/actions/plmFileFeedSpaceConfigure.ts" target="_blank" style="display: inline-flex; align-items: center; color: white; text-decoration: none; background-color: #000; padding: 16px 24px;">View on Github
   <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 8px;">
   <g clip-path="url(#clip0_1519_7607)">
   <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8861 0.423218C5.99451 0.423218 0.42334 6.15238 0.42334 13.2401C0.42334 18.9058 3.99298 23.7016 8.94502 25.399C9.56416 25.5266 9.79094 25.1232 9.79094 24.7839C9.79094 24.4868 9.77053 23.4683 9.77053 22.4071C6.3037 23.1711 5.58176 20.8792 5.58176 20.8792C5.02462 19.3938 4.19911 19.012 4.19911 19.012C3.06441 18.2269 4.28176 18.2269 4.28176 18.2269C5.54043 18.3118 6.20089 19.5425 6.20089 19.5425C7.31492 21.4946 9.11007 20.943 9.83227 20.6034C9.93533 19.7758 10.2657 19.2029 10.6165 18.8847C7.8514 18.5875 4.94222 17.4842 4.94222 12.561C4.94222 11.1605 5.43712 10.0146 6.2213 9.12348C6.09757 8.80525 5.66416 7.48936 6.34528 5.72817C6.34528 5.72817 7.39757 5.38858 9.77028 7.04379C10.7861 6.76323 11.8337 6.62051 12.8861 6.61931C13.9384 6.61931 15.0111 6.76801 16.0017 7.04379C18.3746 5.38858 19.4269 5.72817 19.4269 5.72817C20.108 7.48936 19.6744 8.80525 19.5506 9.12348C20.3555 10.0146 20.83 11.1605 20.83 12.561C20.83 17.4842 17.9208 18.5662 15.1351 18.8847C15.5892 19.2878 15.981 20.0516 15.981 21.2612C15.981 22.98 15.9606 24.3594 15.9606 24.7836C15.9606 25.1232 16.1876 25.5266 16.8065 25.3993C21.7585 23.7013 25.3282 18.9058 25.3282 13.2401C25.3486 6.15238 19.757 0.423218 12.8861 0.423218Z" fill="white"/>
