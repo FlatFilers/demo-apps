@@ -5,41 +5,60 @@ import api from '@flatfile/api';
 import { WorkbookResponse } from '@flatfile/api/api';
 import { attributes as attributesBlueprint } from '../blueprints/_index';
 import { ProductsShowApiService } from '../../../shared/products-show-api-service';
+import { projectSpaceTheme } from '@/workflows/plm/themes/project-space-theme';
+import { projectSpaceDocument } from '@/workflows/plm/documents/project-space-document';
 
 const WORKBOOK_NAME = 'PLM Import';
 
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
-    configureSpace({
-      space: {
-        metadata: {
-          theme: {
-            // add theme here
+    configureSpace(
+      {
+        documents: [projectSpaceDocument],
+        workbooks: [
+          {
+            name: WORKBOOK_NAME,
+            namespace: 'plmImport',
+            sheets: [
+              plmBlueprints.attributes,
+              plmBlueprints.suppliers,
+              plmBlueprints.categories,
+              plmBlueprints.products,
+            ],
+            actions: [
+              {
+                operation: 'submitAction',
+                mode: 'foreground',
+                constraints: [{ type: 'hasData' }],
+                label: 'Submit Data',
+                primary: true,
+              },
+            ],
           },
-        },
+        ],
       },
-      workbooks: [
-        {
-          name: WORKBOOK_NAME,
-          namespace: 'plmImport',
-          sheets: [
-            plmBlueprints.attributes,
-            plmBlueprints.suppliers,
-            plmBlueprints.categories,
-            plmBlueprints.products,
-          ],
-          actions: [
-            {
-              operation: 'submitAction',
-              mode: 'foreground',
-              constraints: [{ type: 'hasData' }],
-              label: 'Submit Data',
-              primary: true,
+      async (event) => {
+        const { spaceId } = event.context;
+        const documents = await api.documents.list(spaceId);
+
+        // Get the first documentId
+        const documentId =
+          documents.data.length > 0 ? documents.data[0]['id'] : null;
+
+        // Update the space adding theme and setting the documentId as the default page
+        await api.spaces.update(spaceId, {
+          metadata: {
+            sidebarConfig: {
+              showSidebar: true,
+              defaultPage: {
+                documentId,
+              },
             },
-          ],
-        },
-      ],
-    })
+            theme: projectSpaceTheme,
+          },
+        });
+      }
+    )
   );
 
   // Seed the workbook with data
