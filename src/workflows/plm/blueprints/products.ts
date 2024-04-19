@@ -40,7 +40,7 @@ export const products: SheetConfig = {
       type: 'reference',
       config: {
         ref: 'product_categories',
-        key: 'category_id',
+        key: 'name',
         relationship: 'has-one',
       },
       constraints: [{ type: 'required' }],
@@ -141,58 +141,98 @@ export const products: SheetConfig = {
       type: 'reference',
       config: {
         ref: 'suppliers',
-        key: 'supplier_id',
+        key: 'name',
         relationship: 'has-one',
       },
       constraints: [{ type: 'required' }],
     },
     {
-      key: 'attribute',
-      label: 'Attribute',
+      key: 'attribute1',
+      label: 'Attribute 1',
       type: 'reference',
       config: {
         ref: 'attributes',
         key: 'attribute_id',
-        relationship: 'has-many',
+        relationship: 'has-one',
       },
     },
     {
-      key: 'is_active',
-      label: 'Is Active',
-      type: 'boolean',
-      description: 'Indicates if the product is currently active',
-      constraints: [
-        { type: 'required' },
-        { type: 'external', validator: 'boolean' },
-      ],
+      key: 'attribute2',
+      label: 'Attribute 2',
+      type: 'reference',
+      config: {
+        ref: 'attributes',
+        key: 'attribute_id',
+        relationship: 'has-one',
+      },
     },
     {
-      key: 'created_at',
-      label: 'Created At',
-      type: 'date',
-      description: 'The date when the product was created',
-      constraints: [
-        { type: 'required' },
-        {
-          type: 'external',
-          validator: 'date',
-          config: { format: 'yyyy-MM-dd' },
-        },
-      ],
+      key: 'attribute3',
+      label: 'Attribute 3',
+      type: 'reference',
+      config: {
+        ref: 'attributes',
+        key: 'attribute_id',
+        relationship: 'has-one',
+      },
     },
     {
-      key: 'updated_at',
-      label: 'Updated At',
-      type: 'date',
-      description: 'The date when the product was last updated',
-      constraints: [
-        { type: 'required' },
-        {
-          type: 'external',
-          validator: 'date',
-          config: { format: 'yyyy-MM-dd' },
-        },
-      ],
+      key: 'attribute4',
+      label: 'Attribute 4',
+      type: 'reference',
+      config: {
+        ref: 'attributes',
+        key: 'attribute_id',
+        relationship: 'has-one',
+      },
     },
+    {
+      key: 'attribute5',
+      label: 'Attribute 5',
+      type: 'reference',
+      config: {
+        ref: 'attributes',
+        key: 'attribute_id',
+        relationship: 'has-one',
+      },
+    },
+    // {
+    //   key: 'is_active',
+    //   label: 'Is Active',
+    //   type: 'boolean',
+    //   description: 'Indicates if the product is currently active',
+    //   constraints: [
+    //     { type: 'required' },
+    //     { type: 'external', validator: 'boolean' },
+    //   ],
+    // },
+    // {
+    //   key: 'created_at',
+    //   label: 'Created At',
+    //   type: 'date',
+    //   description: 'The date when the product was created',
+    //   constraints: [
+    //     { type: 'required' },
+    //     {
+    //       type: 'external',
+    //       validator: 'date',
+    //       config: { format: 'yyyy-MM-dd' },
+    //     },
+    //   ],
+    // },
+    // {
+    //   key: 'updated_at',
+    //   label: 'Updated At',
+    //   type: 'date',
+    //   description: 'The date when the product was last updated',
+    //   constraints: [
+    //     { type: 'required' },
+    //     {
+    //       type: 'external',
+    //       validator: 'date',
+    //       config: { format: 'yyyy-MM-dd' },
+    //     },
+    //   ],
+    // },
   ],
 };
