@@ -1,9 +1,9 @@
-import { filefeedAutomap } from '@/shared/eventHandlers/filefeedAutomap';
-import { handleSubmitData } from '@/shared/eventHandlers/handleSubmitData';
-import { externalConstraints } from '@/shared/externalContraints/externalConstraints';
-import { ecommerceProjectSpaceConfigure } from '@/workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
-import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
-import { plmProjectSpaceConfigure } from '@/workflows/plm/actions/plmProjectSpaceConfigure';
+import { filefeedAutomap } from '../src/shared/eventHandlers/filefeedAutomap';
+import { handleSubmitData } from '../src/shared/eventHandlers/handleSubmitData';
+import { externalConstraints } from '../src/shared/externalContraints/externalConstraints';
+import { ecommerceProjectSpaceConfigure } from '../src/workflows/ecommerce/actions/ecommerceProjectSpaceConfigure';
+import { fieldServicesProjectSpaceConfigure } from '../src/workflows/fieldServices/actions/fieldServicesProjects';
+import { plmProjectSpaceConfigure } from '../src/workflows/plm/actions/plmProjectSpaceConfigure';
 import FlatfileListener from '@flatfile/listener';
 import { externalConstraint } from '@flatfile/plugin-constraints';
 import { JSONExtractor } from '@flatfile/plugin-json-extractor';
