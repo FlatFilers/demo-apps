@@ -1,0 +1,30 @@
+name: Deploy Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.17.0'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy
+        env:
+          FLATFILE_API_KEY: ${{ secrets.FLATFILE_API_KEY }}
+          FLATFILE_ENVIRONMENT_ID: ${{ secrets.FLATFILE_ENVIRONMENT_ID }}
+        run: npm run deploy
