@@ -42,7 +42,16 @@ export function validateTotalValue(record: FlatfileRecord): FlatfileRecord {
 
   if (price !== undefined && quantity !== undefined) {
     const totalValue = price * quantity
-    record.set(FIELDS.totalValue, totalValue)
+    const formattedTotalValue = (
+      Math.round(totalValue * 100) / 100
+    ).toFixed(2)
+    record.set(FIELDS.totalValue, formattedTotalValue)
+    if (parseFloat(formattedTotalValue) !== totalValue) {
+      record.addInfo(
+        FIELDS.totalValue,
+        `The total value has been rounded to two decimal places. Original value: ${totalValue}`
+      )
+    }
   }
 
   return record
