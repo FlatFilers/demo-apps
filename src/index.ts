@@ -11,7 +11,7 @@ import { ProductsShowApiService } from '@/shared/products-show-api-service';
 import { plmEmbeddedSpaceConfigure } from './workflows/plm/actions/plmEmbeddedSpaceConfigure';
 import { plmFileFeedSpaceConfigure } from './workflows/plm/actions/plmFileFeedSpaceConfigure';
 import { fieldServicesFilefeedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesFilefeed';
-import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProject';
+import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
 import { fieldServicesEmbedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesEmbed';
 
 function configureSharedUses(listener: FlatfileListener) {
