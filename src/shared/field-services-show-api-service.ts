@@ -3,12 +3,15 @@ import { FlatfileEvent } from '@flatfile/listener';
 import axios from 'axios';
 import invariant from 'ts-invariant';
 
-// TODO: Adjust schemas
-type AttributeResult = {
-  externalId: string;
+type TechnicianResult = {
+  externalTechnicianId: string;
   name: string;
-  value: string;
-  unit?: string;
+  email: string | null;
+  phoneNumber: string | null;
+  skills: string | null;
+  availability: string | null;
+  licenseCertification: string | null;
+  notes: string | null;
 };
 
 type ProductResult = {
@@ -20,7 +23,7 @@ type ProductResult = {
   quantity: number;
   imageUrl?: string;
   supplierId: string;
-  attributes?: AttributeResult[];
+  attributes?: TechnicianResult[];
 };
 
 export class FieldServicesShowApiService {
@@ -57,14 +60,13 @@ export class FieldServicesShowApiService {
     }
   };
 
-  // TODO: What schema do we want here?
-  static fetchAttributes = async (
+  static fetchTechnicians = async (
     event: FlatfileEvent
-  ): Promise<AttributeResult[]> => {
-    console.log('Fetching attributes from products.show');
+  ): Promise<TechnicianResult[]> => {
+    console.log('Fetching technicians from service.show');
 
     const apiBaseUrl = await event.secrets('SERVICE_API_BASE_URL');
-    const url = `${apiBaseUrl}/api/v1/attributes`;
+    const url = `${apiBaseUrl}/api/v1/technicians`;
 
     let response;
 
@@ -77,15 +79,15 @@ export class FieldServicesShowApiService {
         throw new Error(`response status was ${response.status}`);
       }
     } catch (error) {
-      console.error(`Failed to fetch attributes: ${error.message}`);
+      console.error(`Failed to fetch technicians: ${error.message}`);
       response = [];
     }
 
-    const attributes = response.data.attributes as AttributeResult[];
+    const technicians = response.data.technicians as TechnicianResult[];
 
-    console.log('Attributes found: ' + JSON.stringify(attributes));
+    console.log('Technicians found: ' + JSON.stringify(technicians));
 
-    return attributes;
+    return technicians;
   };
 
   static sendFilefeedEvent = async (event: FlatfileEvent) => {
