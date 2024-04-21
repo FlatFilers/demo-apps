@@ -1,28 +1,30 @@
 import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as fieldServicesBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
+import { modifySheet } from '@/shared/helpers/modifySheet';
 import api from '@flatfile/api';
-import { projectSpaceTheme } from '@/workflows/plm/themes/project-space-theme';
-import { projectSpaceDocument } from '@/workflows/plm/documents/project-space-document';
+import { fileFeedSpaceTheme } from '@/workflows/plm/themes/file-feed-space-theme';
 
-export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
+const modifiedCustomers = modifySheet(fieldServicesBlueprints.customers);
+
+export function fieldServicesFilefeedSpaceConfigure(
+  listener: FlatfileListener
+) {
   listener.use(
     configureSpace(
       {
-        documents: [projectSpaceDocument],
+        space: {
+          metadata: {
+            theme: {
+              // add theme here
+            },
+          },
+        },
         workbooks: [
           {
             name: 'Field Services Import',
             namespace: 'fieldServicesImport',
-            sheets: [
-              fieldServicesBlueprints.workOrders,
-              fieldServicesBlueprints.customers,
-              fieldServicesBlueprints.technicians,
-              fieldServicesBlueprints.inventory,
-              fieldServicesBlueprints.serviceContracts,
-              fieldServicesBlueprints.suppliers,
-              fieldServicesBlueprints.schedules,
-            ],
+            sheets: [modifiedCustomers],
             actions: [
               {
                 operation: 'submitAction',
@@ -52,7 +54,7 @@ export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
                 documentId,
               },
             },
-            theme: projectSpaceTheme,
+            theme: fileFeedSpaceTheme,
           },
         });
       }
