@@ -58,7 +58,6 @@ export default function (listener: FlatfileListener) {
     listener.use(
       filefeedAutomap({
         apiService: ProductsShowApiService,
-        // TODO: Update file name
         matchFilename: /^products-sample-data.*$/i,
       })
     );
@@ -96,6 +95,7 @@ export default function (listener: FlatfileListener) {
     listener.use(
       filefeedAutomap({
         apiService: FieldServicesShowApiService,
+        // TODO: Update file name
         matchFilename: /^products-sample-data.*$/i,
       })
     );
