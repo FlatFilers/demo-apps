@@ -32,8 +32,8 @@ export class ProductsShowApiService {
     const { spaceId } = event.context;
 
     try {
-      const apiBaseUrl = await event.secrets('API_BASE_URL');
-      invariant(apiBaseUrl, 'Missing API_BASE_URL in environment secrets');
+      const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
+      invariant(apiBaseUrl, 'Missing PLM_API_BASE_URL in environment secrets');
 
       const response = await axios.get(
         `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
@@ -61,7 +61,7 @@ export class ProductsShowApiService {
   ): Promise<AttributeResult[]> => {
     console.log('Fetching attributes from products.show');
 
-    const apiBaseUrl = await event.secrets('API_BASE_URL');
+    const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
     const url = `${apiBaseUrl}/api/v1/attributes`;
 
     let response;
@@ -96,7 +96,7 @@ export class ProductsShowApiService {
       return;
     }
 
-    const apiBaseUrl = await event.secrets('API_BASE_URL');
+    const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
     const url = `${apiBaseUrl}/api/webhook/filefeed-event`;
 
     let response;
@@ -133,7 +133,7 @@ export class ProductsShowApiService {
   static fetchProducts = async (event: FlatfileEvent) => {
     console.log('Fetching products from plm.show');
 
-    const apiBaseUrl = await event.secrets('API_BASE_URL');
+    const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
     const url = `${apiBaseUrl}/api/v1/products`;
 
     let response;
