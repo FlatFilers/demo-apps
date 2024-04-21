@@ -13,6 +13,7 @@ import { plmFileFeedSpaceConfigure } from './workflows/plm/actions/plmFileFeedSp
 import { fieldServicesFilefeedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesFilefeed';
 import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
 import { fieldServicesEmbedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesEmbed';
+import { FieldServicesShowApiService } from '@/shared/field-services-show-api-service';
 
 function configureSharedUses(listener: FlatfileListener) {
   listener.use(ExcelExtractor());
@@ -54,7 +55,12 @@ export default function (listener: FlatfileListener) {
     listener.use(plmFileFeedSpaceConfigure);
     configureSharedUses(listener);
 
-    listener.use(filefeedAutomap());
+    listener.use(
+      filefeedAutomap({
+        apiService: ProductsShowApiService,
+        matchFilename: /^products-sample-data.*$/i,
+      })
+    );
 
     listener.on('**', (event) => {
       // Send certain filefeed events to products.show
@@ -86,8 +92,13 @@ export default function (listener: FlatfileListener) {
     listener.use(fieldServicesFilefeedSpaceConfigure);
     configureSharedUses(listener);
 
-    // TODO: adjust the regex you pass in here for services
-    listener.use(filefeedAutomap());
+    listener.use(
+      filefeedAutomap({
+        apiService: FieldServicesShowApiService,
+        // TODO: Update file name
+        matchFilename: /^products-sample-data.*$/i,
+      })
+    );
 
     listener.on('**', (event) => {
       // Send certain filefeed events to products.show
@@ -96,8 +107,7 @@ export default function (listener: FlatfileListener) {
         (event.topic === 'job:completed' &&
           event?.payload?.status === 'complete')
       ) {
-        // TODO: Make services show service and set another API BASE URL
-        ProductsShowApiService.sendFilefeedEvent(event);
+        FieldServicesShowApiService.sendFilefeedEvent(event);
       }
     });
   });

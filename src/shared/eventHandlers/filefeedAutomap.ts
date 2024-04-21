@@ -2,16 +2,22 @@ import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
 import { PipelineJobConfig } from '@flatfile/api/api';
 import { automap } from '@flatfile/plugin-automap';
-import { ProductsShowApiService } from '@/shared/products-show-api-service';
 import { PRODUCTS_SHEET_NAME } from '@/workflows/plm/blueprints/products';
+import { ApiService } from '@/shared/api-service-base';
 
 export const filefeedAutomap =
-  () =>
+  ({
+    apiService,
+    matchFilename,
+  }: {
+    apiService: ApiService;
+    matchFilename: RegExp;
+  }) =>
   (listener: FlatfileListener): void => {
     listener.use(
       automap({
         accuracy: 'confident',
-        matchFilename: /^products-sample-data.*$/i,
+        matchFilename,
         defaultTargetSheet: PRODUCTS_SHEET_NAME,
       })
     );
@@ -33,7 +39,7 @@ export const filefeedAutomap =
       // Sync the space in plm.show
       console.log('Syncing spacde in plm.show');
 
-      const result = await ProductsShowApiService.syncSpace(event);
+      const result = await apiService.syncSpace(event);
 
       console.log('Result:', result);
 
