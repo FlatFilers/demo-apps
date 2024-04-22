@@ -27,7 +27,7 @@ export function plmEmbeddedSpaceConfigure(listener: FlatfileListener) {
                 operation: 'submitAction',
                 mode: 'foreground',
                 constraints: [{ type: 'hasData' }],
-                label: 'Submit Data',
+                label: 'Push records to PLM.show',
                 primary: true,
               },
             ],
