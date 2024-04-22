@@ -1,11 +1,11 @@
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
 import { WorkbookResponse } from '@flatfile/api/api';
-import { WORKBOOK_NAME } from '@/workflows/plm/actions/plmProjectSpaceConfigure';
 import { ProductsShowApiService } from '@/shared/products-show-api-service';
 import * as plmBlueprints from '@/workflows/plm/blueprints/_index';
+import { PLM_WORKBOOK_NAME } from '@/shared/constants';
 
-export const prefillData =
+export const plmPrefillData =
   () =>
   (listener: FlatfileListener): void => {
     // Seed the workbook with data
@@ -26,7 +26,7 @@ export const prefillData =
 
       const workbookName = workbook?.data?.name ? workbook.data.name : '';
 
-      if (workbookName !== WORKBOOK_NAME) {
+      if (workbookName !== PLM_WORKBOOK_NAME) {
         console.error('Error - no workbook found');
         return;
       }
