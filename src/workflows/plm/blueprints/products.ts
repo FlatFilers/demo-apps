@@ -80,9 +80,13 @@ export const products: SheetConfig = {
       config: {
         options: [
           { value: 'USD', label: 'US Dollar' },
+          { value: 'USD', label: '$' },
           { value: 'EUR', label: 'Euro' },
+          { value: 'EUR', label: '€' },
           { value: 'GBP', label: 'British Pound' },
+          { value: 'GBP', label: '£' },
           { value: 'JPY', label: 'Japanese Yen' },
+          { value: 'JPY', label: '¥' },
           { value: 'CAD', label: 'Canadian Dollar' },
           { value: 'AUD', label: 'Australian Dollar' },
           { value: 'CHF', label: 'Swiss Franc' },

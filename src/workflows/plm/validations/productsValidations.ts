@@ -74,6 +74,7 @@ export function calculateTotalValueUSD(
   const totalValue = record.get(FIELDS.totalValue) as number | undefined
   const inputCurrency = record.get(FIELDS.currency) as string | undefined
   let currency = inputCurrency
+  // add support for common currency symbols
   switch (inputCurrency) {
     case "$":
       currency = "USD"
