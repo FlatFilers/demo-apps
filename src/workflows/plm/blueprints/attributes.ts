@@ -1,4 +1,4 @@
-import { SheetConfig } from '@flatfile/api/api'
+import { SheetConfig } from '@flatfile/api/api';
 
 export const attributes: SheetConfig = {
   name: 'Attributes',
@@ -42,4 +42,4 @@ export const attributes: SheetConfig = {
       ],
     },
   ],
-}
+};

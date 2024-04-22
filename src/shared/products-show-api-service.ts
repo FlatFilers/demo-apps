@@ -22,6 +22,23 @@ type ProductResult = {
   attributes?: AttributeResult[];
 };
 
+type SupplierResult = {
+  externalSupplierId: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+};
+
+type CategoryResult = {
+  externalCategoryId: string;
+  name: string;
+  description: string;
+};
+
 export class ProductsShowApiService {
   static syncSpace = async (
     event: FlatfileEvent
@@ -81,6 +98,36 @@ export class ProductsShowApiService {
     console.log('Attributes found: ' + JSON.stringify(attributes));
 
     return attributes;
+  };
+
+  static fetchSuppliers = async (
+    event: FlatfileEvent
+  ): Promise<SupplierResult[]> => {
+    console.log('Fetching suppliers from products.show');
+
+    const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
+    const url = `${apiBaseUrl}/api/v1/suppliers`;
+
+    let response;
+
+    try {
+      response = await axios.get(url, {
+        headers: await this.headers(event),
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to fetch suppliers: ${error.message}`);
+      response = [];
+    }
+
+    const suppliers = response.data.suppliers as SupplierResult[];
+
+    console.log('suppliers found: ' + JSON.stringify(suppliers));
+
+    return suppliers;
   };
 
   static sendFilefeedEvent = async (event: FlatfileEvent) => {
@@ -153,5 +200,33 @@ export class ProductsShowApiService {
     console.log('Products found: ' + JSON.stringify(products));
 
     return products;
+  };
+
+  static fetchCategories = async (event: FlatfileEvent) => {
+    console.log('Fetching categories from plm.show');
+
+    const apiBaseUrl = await event.secrets('PLM_API_BASE_URL');
+    const url = `${apiBaseUrl}/api/v1/categories`;
+
+    let response;
+
+    try {
+      response = await axios.get(url, {
+        headers: await this.headers(event),
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to fetch categories: ${error.message}`);
+      response = [];
+    }
+
+    const categories = response.data.categories as CategoryResult[];
+
+    console.log('categories found: ' + JSON.stringify(categories));
+
+    return categories;
   };
 }

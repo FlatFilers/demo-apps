@@ -15,6 +15,7 @@ import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/ac
 import { fieldServicesEmbedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesEmbed';
 import { FieldServicesShowApiService } from '@/shared/field-services-show-api-service';
 import { ApiService } from '@/shared/api-service-base';
+import { prefillData } from '@/shared/eventHandlers/prefillData';
 
 function configureSharedUses({
   listener,
@@ -50,11 +51,13 @@ export default function (listener: FlatfileListener) {
   // Configure each namespace explicitly
   listener.namespace('space:plmproject', (listener) => {
     listener.use(plmProjectSpaceConfigure);
+    listener.use(prefillData());
     configureSharedUses({ listener, apiService: ProductsShowApiService });
   });
 
   listener.namespace('space:plmembedded', (listener) => {
     listener.use(plmEmbeddedSpaceConfigure);
+    listener.use(prefillData());
     configureSharedUses({ listener, apiService: ProductsShowApiService });
   });
 
