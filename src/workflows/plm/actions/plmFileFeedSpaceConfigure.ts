@@ -5,8 +5,8 @@ import { modifySheet } from '../../../shared/helpers/modifySheet';
 import { fileFeedSpaceTheme } from '@/workflows/plm/themes/file-feed-space-theme';
 import { fileFeedSpaceDocument } from '@/workflows/plm/documents/file-feed-space-document';
 import api from '@flatfile/api';
+import { PLM_WORKBOOK_NAME } from '@/shared/constants';
 
-const WORKBOOK_NAME = 'PLM Import';
 const modifiedProducts = modifySheet(plmBlueprints.products);
 
 export function plmFileFeedSpaceConfigure(listener: FlatfileListener) {
@@ -16,7 +16,7 @@ export function plmFileFeedSpaceConfigure(listener: FlatfileListener) {
         documents: [fileFeedSpaceDocument],
         workbooks: [
           {
-            name: WORKBOOK_NAME,
+            name: PLM_WORKBOOK_NAME,
             namespace: 'plmImport',
             sheets: [modifiedProducts],
             actions: [

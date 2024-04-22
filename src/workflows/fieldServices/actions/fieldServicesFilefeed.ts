@@ -4,6 +4,7 @@ import { FlatfileListener } from '@flatfile/listener';
 import { modifySheet } from '@/shared/helpers/modifySheet';
 import api from '@flatfile/api';
 import { fileFeedSpaceTheme } from '@/workflows/plm/themes/file-feed-space-theme';
+import { FIELD_SERVICE_WORKBOOK_NAME } from '@/shared/constants';
 
 const modifiedCustomers = modifySheet(fieldServicesBlueprints.customers);
 
@@ -13,16 +14,9 @@ export function fieldServicesFilefeedSpaceConfigure(
   listener.use(
     configureSpace(
       {
-        space: {
-          metadata: {
-            theme: {
-              // add theme here
-            },
-          },
-        },
         workbooks: [
           {
-            name: 'Field Services Import',
+            name: FIELD_SERVICE_WORKBOOK_NAME,
             namespace: 'fieldServicesImport',
             sheets: [modifiedCustomers],
             actions: [

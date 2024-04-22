@@ -4,8 +4,7 @@ import { FlatfileListener } from '@flatfile/listener';
 import { embeddedSpaceTheme } from '@/workflows/plm/themes/embedded-space-theme';
 import { embeddedSpaceDocument } from '@/workflows/plm/documents/embedded-space-document';
 import api from '@flatfile/api';
-
-const WORKBOOK_NAME = 'PLM Import';
+import { PLM_WORKBOOK_NAME } from '@/shared/constants';
 
 export function plmEmbeddedSpaceConfigure(listener: FlatfileListener) {
   listener.use(
@@ -14,7 +13,7 @@ export function plmEmbeddedSpaceConfigure(listener: FlatfileListener) {
         documents: [embeddedSpaceDocument],
         workbooks: [
           {
-            name: WORKBOOK_NAME,
+            name: PLM_WORKBOOK_NAME,
             namespace: 'plmImport',
             sheets: [
               plmBlueprints.attributes,

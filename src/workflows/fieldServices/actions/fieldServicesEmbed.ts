@@ -1,12 +1,10 @@
 import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as fieldServicesBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
-import { modifySheet } from '@/shared/helpers/modifySheet';
 import api from '@flatfile/api';
 import { embeddedSpaceTheme } from '@/workflows/plm/themes/embedded-space-theme';
 import { embeddedSpaceDocument } from '@/workflows/plm/documents/embedded-space-document';
-
-const modifiedCustomers = modifySheet(fieldServicesBlueprints.customers);
+import { FIELD_SERVICE_WORKBOOK_NAME } from '@/shared/constants';
 
 export function fieldServicesEmbedSpaceConfigure(listener: FlatfileListener) {
   listener.use(
@@ -15,9 +13,13 @@ export function fieldServicesEmbedSpaceConfigure(listener: FlatfileListener) {
         documents: [embeddedSpaceDocument],
         workbooks: [
           {
-            name: 'Field Services Import',
+            name: FIELD_SERVICE_WORKBOOK_NAME,
             namespace: 'fieldServicesImport',
-            sheets: [modifiedCustomers],
+            sheets: [
+              fieldServicesBlueprints.workOrders,
+              fieldServicesBlueprints.customers,
+              fieldServicesBlueprints.technicians,
+            ],
             actions: [
               {
                 operation: 'submitAction',

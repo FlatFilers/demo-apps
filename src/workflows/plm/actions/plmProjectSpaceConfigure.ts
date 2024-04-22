@@ -4,8 +4,7 @@ import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
 import { projectSpaceTheme } from '@/workflows/plm/themes/project-space-theme';
 import { projectSpaceDocument } from '@/workflows/plm/documents/project-space-document';
-
-export const WORKBOOK_NAME = 'PLM Import';
+import { PLM_WORKBOOK_NAME } from '@/shared/constants';
 
 export function plmProjectSpaceConfigure(listener: FlatfileListener) {
   listener.use(
@@ -14,7 +13,7 @@ export function plmProjectSpaceConfigure(listener: FlatfileListener) {
         documents: [projectSpaceDocument],
         workbooks: [
           {
-            name: WORKBOOK_NAME,
+            name: PLM_WORKBOOK_NAME,
             namespace: 'plmImport',
             sheets: [
               plmBlueprints.attributes,

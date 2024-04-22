@@ -14,16 +14,15 @@ type TechnicianResult = {
   notes: string | null;
 };
 
-type ProductResult = {
-  externalProductId: string;
+type CustomerResult = {
+  externalCustomerId: string;
   name: string;
-  description: string;
-  categoryId: string;
-  price: number;
-  quantity: number;
-  imageUrl?: string;
-  supplierId: string;
-  attributes?: TechnicianResult[];
+  contactPerson: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  preferredContactMethod: string;
+  notes: string;
 };
 
 export class FieldServicesShowApiService {
@@ -90,6 +89,36 @@ export class FieldServicesShowApiService {
     return technicians;
   };
 
+  static fetchCustomers = async (
+    event: FlatfileEvent
+  ): Promise<CustomerResult[]> => {
+    console.log('Fetching customers from service.show');
+
+    const apiBaseUrl = await event.secrets('SERVICE_API_BASE_URL');
+    const url = `${apiBaseUrl}/api/v1/customers`;
+
+    let response;
+
+    try {
+      response = await axios.get(url, {
+        headers: await this.headers(event),
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to fetch customers: ${error.message}`);
+      response = [];
+    }
+
+    const customers = response.data.customers as CustomerResult[];
+
+    console.log('customers found: ' + JSON.stringify(customers));
+
+    return customers;
+  };
+
   static sendFilefeedEvent = async (event: FlatfileEvent) => {
     console.log('Sending filefeed event to service.show.');
 
@@ -132,34 +161,5 @@ export class FieldServicesShowApiService {
       'x-listener-auth': listenerAuthToken,
       'x-space-id': event.context.spaceId,
     };
-  };
-
-  // TODO: What schema do we want here?
-  static fetchProducts = async (event: FlatfileEvent) => {
-    console.log('Fetching products from plm.show');
-
-    const apiBaseUrl = await event.secrets('SERVICE_API_BASE_URL');
-    const url = `${apiBaseUrl}/api/v1/products`;
-
-    let response;
-
-    try {
-      response = await axios.get(url, {
-        headers: await this.headers(event),
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`response status was ${response.status}`);
-      }
-    } catch (error) {
-      console.error(`Failed to fetch products: ${error.message}`);
-      response = [];
-    }
-
-    const products = response.data.products as ProductResult[];
-
-    console.log('Products found: ' + JSON.stringify(products));
-
-    return products;
   };
 }
