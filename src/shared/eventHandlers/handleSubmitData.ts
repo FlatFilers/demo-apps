@@ -1,9 +1,9 @@
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
-import { ProductsShowApiService } from '../products-show-api-service';
+import { ApiService } from '@/shared/api-service-base';
 
 export const handleSubmitData =
-  () =>
+  ({ apiService }: { apiService: ApiService }) =>
   (listener: FlatfileListener): void => {
     listener.on(
       'job:ready',
@@ -17,7 +17,7 @@ export const handleSubmitData =
             progress: 10,
           });
 
-          await ProductsShowApiService.syncSpace(event);
+          await apiService.syncSpace(event);
 
           await api.jobs.complete(jobId, {
             outcome: {

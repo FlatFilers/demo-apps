@@ -22,10 +22,10 @@ export function fieldServicesProjectSpaceConfigure(listener: FlatfileListener) {
               fieldServicesBlueprints.workOrders,
               fieldServicesBlueprints.customers,
               fieldServicesBlueprints.technicians,
-              fieldServicesBlueprints.inventory,
-              fieldServicesBlueprints.serviceContracts,
-              fieldServicesBlueprints.suppliers,
-              fieldServicesBlueprints.schedules,
+              // fieldServicesBlueprints.inventory,
+              // fieldServicesBlueprints.serviceContracts,
+              // fieldServicesBlueprints.suppliers,
+              // fieldServicesBlueprints.schedules,
             ],
             actions: [
               {

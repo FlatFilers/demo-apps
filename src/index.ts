@@ -14,11 +14,18 @@ import { fieldServicesFilefeedSpaceConfigure } from '@/workflows/fieldServices/a
 import { fieldServicesProjectSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesProjects';
 import { fieldServicesEmbedSpaceConfigure } from '@/workflows/fieldServices/actions/fieldServicesEmbed';
 import { FieldServicesShowApiService } from '@/shared/field-services-show-api-service';
+import { ApiService } from '@/shared/api-service-base';
 
-function configureSharedUses(listener: FlatfileListener) {
+function configureSharedUses({
+  listener,
+  apiService,
+}: {
+  listener: FlatfileListener;
+  apiService: ApiService;
+}) {
   listener.use(ExcelExtractor());
   listener.use(JSONExtractor());
-  listener.use(handleSubmitData());
+  listener.use(handleSubmitData({ apiService }));
 
   // Apply external constraints
   Object.entries(externalConstraints).forEach(
@@ -43,17 +50,17 @@ export default function (listener: FlatfileListener) {
   // Configure each namespace explicitly
   listener.namespace('space:plmproject', (listener) => {
     listener.use(plmProjectSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: ProductsShowApiService });
   });
 
   listener.namespace('space:plmembedded', (listener) => {
     listener.use(plmEmbeddedSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: ProductsShowApiService });
   });
 
   listener.namespace('space:plmfilefeed', (listener) => {
     listener.use(plmFileFeedSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: ProductsShowApiService });
 
     listener.use(
       filefeedAutomap({
@@ -80,17 +87,17 @@ export default function (listener: FlatfileListener) {
 
   listener.namespace('space:services-project', (listener) => {
     listener.use(fieldServicesProjectSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: FieldServicesShowApiService });
   });
 
   listener.namespace('space:services-embedded', (listener) => {
     listener.use(fieldServicesEmbedSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: FieldServicesShowApiService });
   });
 
   listener.namespace('space:services-filefeed', (listener) => {
     listener.use(fieldServicesFilefeedSpaceConfigure);
-    configureSharedUses(listener);
+    configureSharedUses({ listener, apiService: FieldServicesShowApiService });
 
     listener.use(
       filefeedAutomap({
