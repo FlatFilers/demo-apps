@@ -91,7 +91,7 @@ export class FieldServicesShowApiService {
   };
 
   static sendFilefeedEvent = async (event: FlatfileEvent) => {
-    console.log('Sending filefeed event to products.show.');
+    console.log('Sending filefeed event to service.show.');
 
     const { spaceId } = event.context;
     const topic = event.payload.job || event.topic;

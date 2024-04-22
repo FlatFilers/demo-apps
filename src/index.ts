@@ -102,13 +102,12 @@ export default function (listener: FlatfileListener) {
     listener.use(
       filefeedAutomap({
         apiService: FieldServicesShowApiService,
-        // TODO: Update file name
-        matchFilename: /^products-sample-data.*$/i,
+        matchFilename: /^customers-sample-data.*$/i,
       })
     );
 
     listener.on('**', (event) => {
-      // Send certain filefeed events to products.show
+      // Send certain filefeed events to service.show
       if (
         event.topic.includes('records:') ||
         (event.topic === 'job:completed' &&
