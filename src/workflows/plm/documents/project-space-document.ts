@@ -81,8 +81,8 @@ export const projectSpaceDocument = {
   </div>
   
   <div class="box">
-  <h2>2. Import your Jobs Data</h2>
-  <p>Click "Import" and select the Jobs data. Follow the mapping instructions in Flatfile to complete the import. Once the data has been mapped, it will be loaded into Flatfile's table UI, where validations and transformations have been applied.</p>
+  <h2>2. Import your data</h2>
+  <p>Click "Import" and follow the mapping instructions in Flatfile to complete the import. Once the data has been mapped, it will be loaded into Flatfile's table UI, where validations and transformations have been applied.</p>
   </div>
   
   <div class="box">
