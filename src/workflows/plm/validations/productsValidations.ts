@@ -72,7 +72,22 @@ export function calculateTotalValueUSD(
   rates: Record<string, number>
 ): FlatfileRecord {
   const totalValue = record.get(FIELDS.totalValue) as number | undefined
-  const currency = record.get(FIELDS.currency) as string | undefined
+  const inputCurrency = record.get(FIELDS.currency) as string | undefined
+  let currency = inputCurrency
+  switch (inputCurrency) {
+    case "$":
+      currency = "USD"
+      break
+    case "£":
+      currency = "GBP"
+      break
+    case "€":
+      currency = "EUR"
+      break
+    case "¥":
+      currency = "JPY"
+      break
+  }
 
   if (totalValue !== undefined && currency && rates[currency]) {
     const exchangeRate = rates[currency] // Retrieve the exchange rate for the record's currency.
