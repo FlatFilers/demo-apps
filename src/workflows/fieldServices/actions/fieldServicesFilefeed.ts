@@ -3,7 +3,7 @@ import * as fieldServicesBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
 import { modifySheet } from '@/shared/helpers/modifySheet';
 import api from '@flatfile/api';
-import { fileFeedSpaceTheme } from '@/workflows/plm/themes/file-feed-space-theme';
+import { fileFeedSpaceTheme } from '@/workflows/themes/file-feed-space-theme';
 import { FIELD_SERVICE_WORKBOOK_NAME } from '@/shared/constants';
 
 const modifiedCustomers = modifySheet(fieldServicesBlueprints.customers);

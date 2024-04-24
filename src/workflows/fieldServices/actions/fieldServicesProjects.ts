@@ -2,7 +2,7 @@ import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as fieldServicesBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
-import { projectSpaceTheme } from '@/workflows/plm/themes/project-space-theme';
+import { projectSpaceTheme } from '@/workflows/themes/project-space-theme';
 import { projectSpaceDocument } from '@/workflows/plm/documents/project-space-document';
 import { WorkbookResponse } from '@flatfile/api/api';
 import { FieldServicesShowApiService } from '@/shared/field-services-show-api-service';
