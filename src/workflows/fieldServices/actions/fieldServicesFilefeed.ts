@@ -5,6 +5,7 @@ import { modifySheet } from '@/shared/helpers/modifySheet';
 import api from '@flatfile/api';
 import { fileFeedSpaceTheme } from '@/workflows/themes/file-feed-space-theme';
 import { FIELD_SERVICE_WORKBOOK_NAME } from '@/shared/constants';
+import { fileFeedSpaceDocument } from '@/workflows/fieldServices/documents/file-feed-space-document';
 
 const modifiedCustomers = modifySheet(fieldServicesBlueprints.customers);
 
@@ -14,6 +15,7 @@ export function fieldServicesFilefeedSpaceConfigure(
   listener.use(
     configureSpace(
       {
+        documents: [fileFeedSpaceDocument],
         workbooks: [
           {
             name: FIELD_SERVICE_WORKBOOK_NAME,
