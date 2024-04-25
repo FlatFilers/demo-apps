@@ -2,7 +2,7 @@ import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as plmBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
 import { modifySheet } from '../../../shared/helpers/modifySheet';
-import { fileFeedSpaceTheme } from '@/workflows/plm/themes/file-feed-space-theme';
+import { fileFeedSpaceTheme } from '@/workflows/themes/file-feed-space-theme';
 import { fileFeedSpaceDocument } from '@/workflows/plm/documents/file-feed-space-document';
 import api from '@flatfile/api';
 import { PLM_WORKBOOK_NAME } from '@/shared/constants';

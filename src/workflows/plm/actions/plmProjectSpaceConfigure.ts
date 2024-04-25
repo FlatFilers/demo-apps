@@ -2,7 +2,7 @@ import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as plmBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
-import { projectSpaceTheme } from '@/workflows/plm/themes/project-space-theme';
+import { projectSpaceTheme } from '@/workflows/themes/project-space-theme';
 import { projectSpaceDocument } from '@/workflows/plm/documents/project-space-document';
 import { PLM_WORKBOOK_NAME } from '@/shared/constants';
 

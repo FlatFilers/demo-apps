@@ -2,8 +2,8 @@ import { configureSpace } from '@flatfile/plugin-space-configure';
 import * as fieldServicesBlueprints from '../blueprints/_index';
 import { FlatfileListener } from '@flatfile/listener';
 import api from '@flatfile/api';
-import { embeddedSpaceTheme } from '@/workflows/plm/themes/embedded-space-theme';
-import { embeddedSpaceDocument } from '@/workflows/plm/documents/embedded-space-document';
+import { embeddedSpaceTheme } from '@/workflows/themes/embedded-space-theme';
+import { embeddedSpaceDocument } from '@/workflows/fieldServices/documents/embedded-space-document';
 import { FIELD_SERVICE_WORKBOOK_NAME } from '@/shared/constants';
 
 export function fieldServicesEmbedSpaceConfigure(listener: FlatfileListener) {
