@@ -1,7 +1,7 @@
-import { PhoneNumberUtil } from 'google-libphonenumber'
-import { parse, isValid, format } from 'date-fns'
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import { parse, isValid, format } from 'date-fns';
 
-const phoneUtil = PhoneNumberUtil.getInstance()
+const phoneUtil = PhoneNumberUtil.getInstance();
 
 // Function to format a date string based on the specified format
 function formatDate(dateString, outputFormat) {
@@ -11,35 +11,35 @@ function formatDate(dateString, outputFormat) {
     'dd/MM/yyyy',
     'yyyy/MM/dd',
     // Add more input formats as needed
-  ]
+  ];
 
-  let parsedDate = null
+  let parsedDate = null;
 
   // Iterate through the input formats and try to parse the date string
   for (const inputFormat of inputFormats) {
-    parsedDate = parse(dateString, inputFormat, new Date())
+    parsedDate = parse(dateString, inputFormat, new Date());
     if (isValid(parsedDate)) {
       // If the date string is successfully parsed, format it using the specified output format
-      return format(parsedDate, outputFormat)
+      return format(parsedDate, outputFormat);
     }
   }
 
   // If none of the input formats match, return 'Invalid Date'
-  return 'Invalid Date'
+  return 'Invalid Date';
 }
 
 export const externalConstraints = {
   length: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const minLength = config.min || 1
-        const maxLength = config.max
+        const minLength = config.min || 1;
+        const maxLength = config.max;
 
         if (value.length < minLength || value.length > maxLength) {
           record.addError(
             key,
             `Text must be between ${minLength} and ${maxLength} characters.`
-          )
+          );
         }
       }
     },
@@ -47,9 +47,9 @@ export const externalConstraints = {
   email: {
     validator: (value, key, { record }) => {
       if (value) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
-          record.addError(key, 'Invalid email format.')
+          record.addError(key, 'Invalid email format.');
         }
       }
     },
@@ -58,12 +58,12 @@ export const externalConstraints = {
     validator: (value, key, { config, record }) => {
       if (value) {
         try {
-          const phoneNumber = phoneUtil.parse(value, config.region)
+          const phoneNumber = phoneUtil.parse(value, config.region);
           if (!phoneUtil.isValidNumber(phoneNumber)) {
-            record.addError(key, 'Invalid phone number.')
+            record.addError(key, 'Invalid phone number.');
           }
         } catch (error) {
-          record.addError(key, 'Invalid phone number format.')
+          record.addError(key, 'Invalid phone number format.');
         }
       }
     },
@@ -71,9 +71,12 @@ export const externalConstraints = {
   zipCode: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/
+        const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/;
         if (!zipCodeRegex.test(value)) {
-          record.addError(key, `Invalid ${config.countryCode} zip code format.`)
+          record.addError(
+            key,
+            `Invalid ${config.countryCode} zip code format.`
+          );
         }
       }
     },
@@ -81,24 +84,24 @@ export const externalConstraints = {
   date: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const dateFormat = config.format || 'yyyy-MM-dd' // Use the format from config or default to 'yyyy-MM-dd'
+        const dateFormat = config.format || 'yyyy-MM-dd'; // Use the format from config or default to 'yyyy-MM-dd'
 
         // Format the date string using the helper function formatDate and the specified format
-        const formattedDate = formatDate(value.trim(), dateFormat)
+        const formattedDate = formatDate(value.trim(), dateFormat);
 
         // If the formatted date is invalid, add an error to the record
         if (formattedDate === 'Invalid Date') {
           record.addError(
             key,
             `Please check that the date is in the format: ${dateFormat}`
-          )
+          );
         } else {
           // Update the record with the formatted date
-          record.set(key, formattedDate)
+          record.set(key, formattedDate);
 
           // Add a comment only if the formatted date is different from the original value
           if (formattedDate !== value.trim()) {
-            record.addComment(key, `Date has been formatted as ${dateFormat}`)
+            record.addComment(key, `Date has been formatted as ${dateFormat}`);
           }
         }
       }
@@ -108,9 +111,9 @@ export const externalConstraints = {
     validator: (value, key, { record }) => {
       if (value) {
         const urlRegex =
-          /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+          /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
         if (!urlRegex.test(value)) {
-          record.addError(key, 'Invalid URL format.')
+          record.addError(key, 'Invalid URL format.');
         }
       }
     },
@@ -118,35 +121,35 @@ export const externalConstraints = {
   dateRange: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const dateFormat = config.format || 'yyyy-MM-dd' // Use the format from config or default to 'yyyy-MM-dd'
+        const dateFormat = config.format || 'yyyy-MM-dd'; // Use the format from config or default to 'yyyy-MM-dd'
 
         // Format the date string using the helper function formatDate and the specified format
-        const formattedDate = formatDate(value.trim(), dateFormat)
+        const formattedDate = formatDate(value.trim(), dateFormat);
 
         // If the formatted date is invalid, add an error to the record
         if (formattedDate === 'Invalid Date') {
           record.addError(
             key,
             `Please check that the date is in the format: ${dateFormat}`
-          )
+          );
         } else {
           // Update the record with the formatted date
-          record.set(key, formattedDate)
+          record.set(key, formattedDate);
 
           // Add a comment only if the formatted date is different from the original value
           if (formattedDate !== value.trim()) {
-            record.addComment(key, `Date has been formatted as ${dateFormat}`)
+            record.addComment(key, `Date has been formatted as ${dateFormat}`);
           }
 
           // Check if the date is within the specified range
-          const date = new Date(formattedDate)
-          const minDate = config.min ? new Date(config.min) : null
-          const maxDate = config.max ? new Date(config.max) : null
+          const date = new Date(formattedDate);
+          const minDate = config.min ? new Date(config.min) : null;
+          const maxDate = config.max ? new Date(config.max) : null;
           if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
             record.addError(
               key,
               `Date must be between ${config.min} and ${config.max}.`
-            )
+            );
           }
         }
       }
@@ -156,14 +159,14 @@ export const externalConstraints = {
   numberRange: {
     validator: (value, key, { config, record }) => {
       if (value !== undefined && value !== null) {
-        const numericValue = Number(value)
+        const numericValue = Number(value);
         if (isNaN(numericValue)) {
-          record.addError(key, 'Invalid numeric value.')
+          record.addError(key, 'Invalid numeric value.');
         } else if (numericValue < config.min || numericValue > config.max) {
           record.addError(
             key,
             `Number must be between ${config.min} and ${config.max}.`
-          )
+          );
         }
       }
     },
@@ -171,16 +174,16 @@ export const externalConstraints = {
   dateTimeRange: {
     validator: (value, key, { config, record }) => {
       if (value) {
-        const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+        const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
         if (!dateTimeRegex.test(value)) {
           record.addError(
             key,
             'Invalid date/time format. Expected format: yyyy-MM-ddTHH:mm:ss.'
-          )
+          );
         } else {
-          const dateTime = new Date(value)
-          const minDateTime = config.min ? new Date(config.min) : null
-          const maxDateTime = config.max ? new Date(config.max) : null
+          const dateTime = new Date(value);
+          const minDateTime = config.min ? new Date(config.min) : null;
+          const maxDateTime = config.max ? new Date(config.max) : null;
           if (
             (minDateTime && dateTime < minDateTime) ||
             (maxDateTime && dateTime > maxDateTime)
@@ -190,7 +193,7 @@ export const externalConstraints = {
               `Date/time must be between ${config.min || 'any'} and ${
                 config.max || 'any'
               }.`
-            )
+            );
           }
         }
       }
@@ -211,10 +214,10 @@ export const externalConstraints = {
           n: false,
           off: false,
           0: false,
-        }
+        };
 
         // Get the value of the boolean field from the record
-        let fieldValue = value
+        let fieldValue = value;
 
         // Check if the value is a string and is present in the synonyms object
         if (
@@ -222,18 +225,39 @@ export const externalConstraints = {
           fieldValue.toLowerCase() in synonyms
         ) {
           // Map the synonym to its corresponding boolean value
-          const mappedValue = synonyms[fieldValue.toLowerCase()]
+          const mappedValue = synonyms[fieldValue.toLowerCase()];
 
           // Set the mapped value back to the record
-          record.set(key, mappedValue)
+          record.set(key, mappedValue);
 
           // Add an info message indicating the mapping
-          record.addInfo(key, `Value "${fieldValue}" mapped to ${mappedValue}`)
+          record.addInfo(key, `Value "${fieldValue}" mapped to ${mappedValue}`);
         } else if (typeof fieldValue !== 'boolean') {
           // If the value is not a boolean and not a valid synonym, add an error to the record
-          record.addError(key, 'This field must be a boolean')
+          record.addError(key, 'This field must be a boolean');
         }
       }
     },
   },
-}
+
+  jobCode: {
+    validator: (value, key, { record }) => {
+      let jobName = record.get('jobName');
+      let jobCode = value;
+      let jobNamePresent = jobName && jobName.trim().length > 0;
+
+      if (!jobCode && jobNamePresent) {
+        jobCode = jobName.replace(/[,\s-]+/g, '_').replace(/&/g, 'and');
+
+        // Set the generated job code in the record
+        record.set(key, jobCode);
+
+        // Add an info message indicating that the job code has been automatically generated
+        record.addInfo(
+          key,
+          'Job Code was not provided, this has been automatically generated for use in HCM Show'
+        );
+      }
+    },
+  },
+};
