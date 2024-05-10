@@ -58,34 +58,6 @@ export const hcmPrefillData =
         throw error;
       }
 
-      try {
-        const employeesSheet = sheets.find(
-          (s) => s.config.slug === hcmBlueprints.employees.slug
-        );
-
-        console.log('Fetching employees from hcm.show...');
-
-        // Fetch employees from hcm.show API
-        const employees = await HcmShowApiService.fetchEmployees(event);
-
-        if (employeesSheet && employees && employees.length > 0) {
-          const employeesSheetId = employeesSheet.id;
-
-          const mappedEmployees = employees.map(
-            ({ id, name, email, departmentId }) => ({
-              employee_id: { value: id },
-              name: { value: name },
-              email: { value: email },
-              department_id: { value: departmentId },
-            })
-          );
-
-          await api.records.insert(employeesSheetId, mappedEmployees);
-        }
-      } catch (error) {
-        console.error('Error fetching employees:', error.message);
-        throw error;
-      }
       console.log('Prefill data complete');
     });
   };

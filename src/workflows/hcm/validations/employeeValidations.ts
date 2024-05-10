@@ -19,15 +19,13 @@ export async function checkApiForExistingEmployees(
       let employeeId = record.get('employeeId');
       console.log('employeeId:', employeeId); // Log the current value of employeeId
 
-      // Check if the product_id matches an id from the API data
-      const matchingProduct = employees.find(
-        (employee: { employeeId: string }) => {
-          return String(employee.employeeId) === String(employeeId); // Convert both to strings for comparison
-        }
-      );
+      // Check if the employeeId matches an id from the API data
+      const matchingEmployees = employees.find((employee) => {
+        return String(employee.employeeId) === String(employeeId); // Convert both to strings for comparison
+      });
 
       // If a match is found, add an error to the employeeId field
-      if (matchingProduct) {
+      if (matchingEmployees) {
         console.log('Match found, adding error to employeeId field');
         record.addError(
           'employeeId',
