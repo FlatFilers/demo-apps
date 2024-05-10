@@ -3,26 +3,26 @@ import { FlatfileEvent } from '@flatfile/listener';
 import axios from 'axios';
 import invariant from 'ts-invariant';
 
-// type DepartmentResult = {
-//   externalDepartmentId: string;
-//   name: string;
-//   description: string;
-// };
+type DepartmentResult = {
+  externalDepartmentId: string;
+  name: string;
+  description: string;
+};
 
-// type EmployeeResult = {
-//   flatfileRecordId: string;
-//   firstName: string;
-//   lastName: string;
-//   phoneNumber: string;
-//   departmentId: string;
-//   jobId: string;
-// };
+type EmployeeResult = {
+  flatfileRecordId: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  departmentId: string;
+  jobId: string;
+};
 
-// type JobResult = {
-//   externalJobId: string;
-//   name: string;
-//   description: string;
-// };
+type JobResult = {
+  externalJobId: string;
+  name: string;
+  description: string;
+};
 
 export class HcmShowApiService {
   static syncSpace = async (
@@ -69,7 +69,9 @@ export class HcmShowApiService {
     };
   };
 
-  static fetchDepartments = async (event: FlatfileEvent): Promise<[]> => {
+  static fetchDepartments = async (
+    event: FlatfileEvent
+  ): Promise<DepartmentResult[]> => {
     console.log('Fetching departments from hcm.show');
 
     const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
@@ -97,7 +99,9 @@ export class HcmShowApiService {
     return departments;
   };
 
-  static fetchEmployees = async (event: FlatfileEvent): Promise<[]> => {
+  static fetchEmployees = async (
+    event: FlatfileEvent
+  ): Promise<EmployeeResult[]> => {
     console.log('Fetching employees from hcm.show');
 
     const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
@@ -125,7 +129,7 @@ export class HcmShowApiService {
     return employees;
   };
 
-  static fetchJobs = async (event: FlatfileEvent): Promise<[]> => {
+  static fetchJobs = async (event: FlatfileEvent): Promise<JobResult[]> => {
     console.log('Fetching jobs from hcm.show');
 
     const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
