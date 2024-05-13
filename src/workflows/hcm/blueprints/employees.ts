@@ -10,7 +10,7 @@ export const employees: SheetConfig = {
       //Enter a unique Employee ID. The ID is already in use by [Employee][EmployeeNew].
       //Validate against exisitng Employee in DB - call out the ID already exists & this would be an update and not a create
 
-      key: 'EmployeeID',
+      key: 'employeeId',
       type: 'string',
       label: 'Employee ID',
       description: 'Unique Identifier for a Employee.',
