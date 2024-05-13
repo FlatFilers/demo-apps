@@ -46,10 +46,12 @@ export const hcmPrefillData =
         if (departmentsSheet && departments && departments.length > 0) {
           const departmentsSheetId = departmentsSheet.id;
 
-          const mappedDepartments = departments.map(({ id, name }) => ({
-            department_id: { value: id },
-            name: { value: name },
-          }));
+          const mappedDepartments = departments.map(
+            ({ departmentCode, departmentName }) => ({
+              departmentCode: { value: departmentCode },
+              departmentName: { value: departmentName },
+            })
+          );
 
           await api.records.insert(departmentsSheetId, mappedDepartments);
         }

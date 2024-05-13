@@ -4,24 +4,29 @@ import axios from 'axios';
 import invariant from 'ts-invariant';
 
 type DepartmentResult = {
-  externalDepartmentId: string;
-  name: string;
-  description: string;
+  id: string;
+  departmentName: string;
+  departmentCode: string;
 };
 
 type EmployeeResult = {
-  flatfileRecordId: string;
+  id: string;
+  employeeId: string;
+  managerId: string;
+  fullName: string;
   firstName: string;
   lastName: string;
+  employeeType: string;
+  hireDate: string;
+  endEmploymentDate: string;
+  jobName: string;
+  jobCode: string;
+  positionTitle: string;
+  defaultWeeklyHours: number;
+  scheduledWeeklyHours: number;
+  emailAddress: string;
+  password: string;
   phoneNumber: string;
-  departmentId: string;
-  jobId: string;
-};
-
-type JobResult = {
-  externalJobId: string;
-  name: string;
-  description: string;
 };
 
 export class HcmShowApiService {
@@ -127,33 +132,5 @@ export class HcmShowApiService {
     console.log('Employees found: ' + JSON.stringify(employees));
 
     return employees;
-  };
-
-  static fetchJobs = async (event: FlatfileEvent): Promise<JobResult[]> => {
-    console.log('Fetching jobs from hcm.show');
-
-    const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
-    const url = `${apiBaseUrl}/api/v1/jobs`;
-
-    let response;
-
-    try {
-      response = await axios.get(url, {
-        headers: await this.headers(event),
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`response status was ${response.status}`);
-      }
-    } catch (error) {
-      console.error(`Failed to fetch jobs: ${error.message}`);
-      response = [];
-    }
-
-    const jobs = response.data.jobs as [];
-
-    console.log('Jobs found: ' + JSON.stringify(jobs));
-
-    return jobs;
   };
 }
