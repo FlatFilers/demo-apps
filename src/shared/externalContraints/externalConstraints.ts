@@ -8,6 +8,7 @@ function formatDate(dateString, outputFormat) {
   const inputFormats = [
     'yyyy-MM-dd',
     'MM/dd/yyyy',
+    'MM/dd/yy',
     'dd/MM/yyyy',
     'yyyy/MM/dd',
     // Add more input formats as needed

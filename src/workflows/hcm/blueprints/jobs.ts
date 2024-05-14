@@ -59,6 +59,7 @@ export const jobs: SheetConfig = {
         {
           type: 'external',
           validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
         },
       ],
       readonly: false,
