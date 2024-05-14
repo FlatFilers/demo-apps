@@ -97,7 +97,7 @@ export class HcmShowApiService {
       response = [];
     }
 
-    const departments = response.data.departments as [];
+    const departments = response.data as [];
 
     console.log('Departments found: ' + JSON.stringify(departments));
 
