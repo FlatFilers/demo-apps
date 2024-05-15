@@ -4,7 +4,7 @@ import { checkApiForExistingEmployees } from '@/workflows/hcm/validations/employ
 
 export async function hcmValidations(listener: FlatfileListener) {
   listener.use(
-    bulkRecordHook('employees', async (records, event) => {
+    bulkRecordHook('employees-sheet', async (records, event) => {
       await checkApiForExistingEmployees(records, event); // Checks if the employee_id exists in the API data
     })
   );

@@ -21,7 +21,7 @@ export async function checkApiForExistingEmployees(
 
       // Check if the employeeId matches an id from the API data
       const matchingEmployees = employees.find((employee) => {
-        return String(employee.employeeId) === String(employeeId); // Convert both to strings for comparison
+        return String(employee) === String(employeeId); // Convert both to strings for comparison
       });
 
       // If a match is found, add an error to the employeeId field

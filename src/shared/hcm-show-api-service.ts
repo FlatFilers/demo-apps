@@ -108,15 +108,16 @@ export class HcmShowApiService {
     event: FlatfileEvent
   ): Promise<EmployeeResult[]> => {
     console.log('Fetching employees from hcm.show');
-
     const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
     const url = `${apiBaseUrl}/api/v1/employees`;
+    const { spaceId } = event.context;
 
     let response;
 
     try {
       response = await axios.get(url, {
         headers: await this.headers(event),
+        params: { spaceId },
       });
 
       if (response.status !== 200) {
@@ -127,7 +128,7 @@ export class HcmShowApiService {
       response = [];
     }
 
-    const employees = response.data.employees as [];
+    const employees = response.data as [];
 
     console.log('Employees found: ' + JSON.stringify(employees));
 
