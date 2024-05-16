@@ -2,7 +2,7 @@ import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { FlatfileEvent } from '@flatfile/listener';
 import { FlatfileRecord } from '@flatfile/plugin-record-hook';
 
-export async function checkApiForExistingEmployees(
+export async function employeeValidations(
   records: FlatfileRecord[],
   event: FlatfileEvent
 ): Promise<FlatfileRecord> {
@@ -38,6 +38,49 @@ export async function checkApiForExistingEmployees(
       record.addError('employeeId', "Couldn't process data from the API.");
     }
 
+    concatinateNames(record);
+
     return record;
   });
+}
+
+export function concatinateNames(record: FlatfileRecord) {
+  console.log('Concatenating names for record:', record);
+  try {
+    let fullName = record.get('fullName');
+    let firstName = record.get('firstName');
+    let lastName = record.get('lastName');
+
+    if (
+      !nameIsPresent(fullName) &&
+      nameIsPresent(firstName) &&
+      nameIsPresent(lastName)
+    ) {
+      firstName = cleanName(firstName);
+      lastName = cleanName(lastName);
+      fullName = `${firstName} ${lastName}`;
+      record.addInfo(
+        'fullName',
+        `Full Name was missing or empty. It has been filled by concatenating the provided First Name: '${firstName}' and Last Name: '${lastName}'.`
+      );
+    } else {
+      cleanName(fullName);
+    }
+    record.set('fullName', fullName);
+  } catch (error) {
+    console.log('Error occurred during name concatenation:', error);
+  }
+
+  return record;
+}
+
+function cleanName(name) {
+  if (name === null || name === undefined) {
+    return '';
+  }
+  return name.trim().replace(/\s+/g, ' ');
+}
+
+function nameIsPresent(name) {
+  return name && name.trim().length > 0;
 }
