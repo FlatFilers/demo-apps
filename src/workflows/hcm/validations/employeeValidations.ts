@@ -22,30 +22,7 @@ export async function employeeValidations(
   }
 
   records.forEach((record: FlatfileRecord) => {
-    try {
-      // Get the current value of the employeeId field
-      let employeeId = record.get('employeeId');
-      console.log('employeeId:', employeeId); // Log the current value of employeeId
-
-      // Check if the employeeId matches an id from the API data
-      const matchingEmployees = employees.find((employee) => {
-        return String(employee) === String(employeeId); // Convert both to strings for comparison
-      });
-
-      // If a match is found, add an error to the employeeId field
-      if (matchingEmployees) {
-        console.log('Match found, adding error to employeeId field');
-        record.addError(
-          'employeeId',
-          'Employee ID matches an existing ID in HCM application.'
-        );
-      }
-    } catch (error) {
-      console.log('Error occurred during API check:', error); // Log any errors that occurred during the check
-      // If an error occurred during the check, add an error to the product_id field
-      record.addError('employeeId', "Couldn't process data from the API.");
-    }
-
+    checkApiForDuplicateEmployeeId(record, employees);
     concatinateNames(record);
     splitFullName(record);
     employeeHours(record);
@@ -53,6 +30,32 @@ export async function employeeValidations(
 
     return record;
   });
+}
+
+function checkApiForDuplicateEmployeeId(record: FlatfileRecord, employees) {
+  try {
+    // Get the current value of the employeeId field
+    let employeeId = record.get('employeeId');
+    console.log('employeeId:', employeeId); // Log the current value of employeeId
+
+    // Check if the employeeId matches an id from the API data
+    const matchingEmployees = employees.find((employee) => {
+      return String(employee) === String(employeeId); // Convert both to strings for comparison
+    });
+
+    // If a match is found, add an error to the employeeId field
+    if (matchingEmployees) {
+      console.log('Match found, adding error to employeeId field');
+      record.addError(
+        'employeeId',
+        'Employee ID matches an existing ID in HCM application.'
+      );
+    }
+  } catch (error) {
+    console.log('Error occurred during API check:', error); // Log any errors that occurred during the check
+    // If an error occurred during the check, add an error to the product_id field
+    record.addError('employeeId', "Couldn't process data from the API.");
+  }
 }
 
 function concatinateNames(record: FlatfileRecord) {

@@ -19,7 +19,7 @@ export const departments: SheetConfig = {
           type: 'unique',
         },
       ],
-      readonly: false,
+      readonly: true,
     },
     {
       key: 'departmentName',
@@ -31,7 +31,7 @@ export const departments: SheetConfig = {
           type: 'required',
         },
       ],
-      readonly: false,
+      readonly: true,
     },
   ],
 };
