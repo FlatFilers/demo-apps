@@ -74,6 +74,49 @@ export function concatinateNames(record: FlatfileRecord) {
   return record;
 }
 
+export function splitFullName(record: FlatfileRecord) {
+  try {
+    let fullName = record.get('fullName');
+    let firstName = record.get('firstName');
+    let lastName = record.get('lastName');
+
+    if (
+      nameIsPresent(fullName) &&
+      !nameIsPresent(firstName) &&
+      !nameIsPresent(lastName)
+    ) {
+      console.log('Parsing full name...');
+      const parsedName = parseFullName(fullName);
+
+      const firstName = parsedName.first;
+      const lastName = parsedName.last;
+
+      console.log('Setting name fields...');
+      record.set('firstName', firstName);
+      record.addInfo(
+        'firstName',
+        `First Name was missing or empty. It has been extracted from the provided Full Name: '${fullName}'.`
+      );
+      record.set('lastName', lastName);
+      record.addInfo(
+        'lastName',
+        `Last Name was missing or empty. It has been extracted from the provided Full Name: '${fullName}'.`
+      );
+    }
+  } catch (error) {
+    console.log('Error occurred during name splitting:', error);
+  }
+
+  return record;
+}
+
+function parseFullName(fullName) {
+  const full = fullName.split(' ');
+  const first = full.shift();
+  const last = full.join(' ');
+  return { first, last };
+}
+
 function cleanName(name) {
   if (name === null || name === undefined) {
     return '';
