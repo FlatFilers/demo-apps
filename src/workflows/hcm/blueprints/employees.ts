@@ -213,7 +213,7 @@ export const employees: SheetConfig = {
       label: 'Email Address',
       description:
         "The email address of the Employee. Email addresses must be in the format of 'xxx@yy.com'. Valid examples: john.doe@aol.com, jane@aol.com.",
-      constraints: [],
+      constraints: [{ type: 'external', validator: 'email' }],
       readonly: false,
     },
     {
@@ -238,7 +238,9 @@ export const employees: SheetConfig = {
       type: 'string',
       label: 'Phone Number',
       description: '',
-      constraints: [],
+      constraints: [
+        { type: 'external', validator: 'phone', config: { region: 'US' } },
+      ],
       readonly: false,
     },
   ],

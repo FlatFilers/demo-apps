@@ -15,3 +15,22 @@ export function validations(listener: FlatfileListener) {
   listener.use(plmValidations);
   listener.use(hcmValidations);
 }
+
+export function isNotNil(value: any): boolean {
+  console.log('value:', value, typeof value);
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== '' &&
+    !Array.isArray(value)
+  );
+}
+
+export function isNil(value: any): boolean {
+  return (
+    value === null ||
+    value === undefined ||
+    value === '' ||
+    Array.isArray(value)
+  );
+}
