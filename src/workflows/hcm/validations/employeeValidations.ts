@@ -8,7 +8,13 @@ export async function employeeValidations(
   records: FlatfileRecord[],
   event: FlatfileEvent
 ): Promise<FlatfileRecord> {
-  const employees = await HcmShowApiService.fetchEmployees(event);
+  let employees;
+
+  try {
+    employees = await HcmShowApiService.fetchEmployees(event);
+  } catch (error) {
+    console.log('Error occurred during API check:', error);
+  }
 
   if (!employees) {
     console.log('Failed to fetch employees data from the API');
