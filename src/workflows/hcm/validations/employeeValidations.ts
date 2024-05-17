@@ -21,7 +21,7 @@ export async function employeeValidations(
     return;
   }
 
-  records.map((record: FlatfileRecord) => {
+  records.forEach((record: FlatfileRecord) => {
     try {
       // Get the current value of the employeeId field
       let employeeId = record.get('employeeId');
