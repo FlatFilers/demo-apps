@@ -240,25 +240,4 @@ export const externalConstraints = {
       }
     },
   },
-
-  jobCode: {
-    validator: (value, key, { record }) => {
-      let jobName = record.get('jobName');
-      let jobCode = value;
-      let jobNamePresent = jobName && jobName.trim().length > 0;
-
-      if (!jobCode && jobNamePresent) {
-        jobCode = jobName.replace(/[,\s-]+/g, '_').replace(/&/g, 'and');
-
-        // Set the generated job code in the record
-        record.set(key, jobCode);
-
-        // Add an info message indicating that the job code has been automatically generated
-        record.addInfo(
-          key,
-          'Job Code was not provided, this has been automatically generated for use in HCM Show'
-        );
-      }
-    },
-  },
 };
