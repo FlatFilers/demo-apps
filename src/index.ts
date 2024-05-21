@@ -22,6 +22,8 @@ import { CUSTOMERS_SHEET_NAME } from '@/workflows/fieldServices/blueprints/custo
 import { hcmProjectSpaceConfigure } from './workflows/hcm/actions/hcmProjectSpaceConfigure';
 import { hcmPrefillData } from '@/shared/eventHandlers/hcmPrefillData';
 import { HcmShowApiService } from '@/shared/hcm-show-api-service';
+import { hcmEmbeddedSpaceConfigure } from '@/workflows/hcm/actions/hcmEmbeddedSpaceConfigure';
+import { hcmFileFeedSpaceConfigure } from '@/workflows/hcm/actions/hcmFileFeedSpaceConfigure';
 
 function configureSharedUses({
   listener,
@@ -139,6 +141,35 @@ export default function (listener: FlatfileListener) {
     listener.use(hcmProjectSpaceConfigure);
     listener.use(hcmPrefillData());
     configureSharedUses({ listener, apiService: HcmShowApiService });
+  });
+
+  listener.namespace('space:hcmembedded', (listener) => {
+    listener.use(hcmEmbeddedSpaceConfigure);
+    listener.use(hcmPrefillData());
+    configureSharedUses({ listener, apiService: HcmShowApiService });
+  });
+
+  listener.namespace('space:hcmfilefeed', (listener) => {
+    listener.use(hcmFileFeedSpaceConfigure);
+    configureSharedUses({ listener, apiService: HcmShowApiService });
+
+    listener.use(
+      filefeedAutomap({
+        apiService: HcmShowApiService,
+        matchFilename: /^benefits.*$/i,
+      })
+    );
+
+    listener.on('**', (event) => {
+      // Send certain filefeed events to hcm.show
+      if (
+        event.topic.includes('records:') ||
+        (event.topic === 'job:completed' &&
+          event?.payload?.status === 'complete')
+      ) {
+        HcmShowApiService.sendFilefeedEvent(event);
+      }
+    });
   });
 
   // Add more namespace configurations as needed)

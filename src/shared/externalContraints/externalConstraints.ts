@@ -240,4 +240,22 @@ export const externalConstraints = {
       }
     },
   },
+  number: {
+    validator: (value, key, { config, record }) => {
+      if (value) {
+        const numericValue = Number(value);
+        if (isNaN(numericValue)) {
+          record.addError(
+            key,
+            `The field "${key}" should be a number. Please enter a valid numeric value, using a dot (.) as a decimal separator.`
+          );
+        } else {
+          const roundedValue = Number(
+            numericValue.toFixed(config.decimalPlaces)
+          );
+          record.set(key, roundedValue);
+        }
+      }
+    },
+  },
 };
