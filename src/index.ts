@@ -19,6 +19,9 @@ import { plmPrefillData } from '@/shared/eventHandlers/plmPrefillData';
 import { fieldServicePrefillData } from '@/shared/eventHandlers/fieldServicePrefillData';
 import { PRODUCTS_SHEET_NAME } from '@/workflows/plm/blueprints/products';
 import { CUSTOMERS_SHEET_NAME } from '@/workflows/fieldServices/blueprints/customers';
+import { hcmProjectSpaceConfigure } from './workflows/hcm/actions/hcmProjectSpaceConfigure';
+import { hcmPrefillData } from '@/shared/eventHandlers/hcmPrefillData';
+import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 
 function configureSharedUses({
   listener,
@@ -131,6 +134,12 @@ export default function (listener: FlatfileListener) {
   // Note: This listener is running in-browser in the fieldservice.show app.
   // listener.namespace('space:services-dynamic', (listener) => {
   // });
+
+  listener.namespace('space:hcmproject', (listener) => {
+    listener.use(hcmProjectSpaceConfigure);
+    listener.use(hcmPrefillData());
+    configureSharedUses({ listener, apiService: HcmShowApiService });
+  });
 
   // Add more namespace configurations as needed)
 }
