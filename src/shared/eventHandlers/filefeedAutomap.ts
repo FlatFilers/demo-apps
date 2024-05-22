@@ -9,16 +9,18 @@ export const filefeedAutomap =
   ({
     apiService,
     matchFilename,
+    defaultTargetSheet,
   }: {
     apiService: ApiService;
     matchFilename: RegExp;
+    defaultTargetSheet;
   }) =>
   (listener: FlatfileListener): void => {
     listener.use(
       automap({
         accuracy: 'confident',
         matchFilename,
-        defaultTargetSheet: CUSTOMERS_SHEET_NAME,
+        defaultTargetSheet,
       })
     );
 
