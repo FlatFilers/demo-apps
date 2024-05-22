@@ -3,22 +3,23 @@ import api from '@flatfile/api';
 import { PipelineJobConfig } from '@flatfile/api/api';
 import { automap } from '@flatfile/plugin-automap';
 import { ApiService } from '@/shared/api-service-base';
-import { CUSTOMERS_SHEET_NAME } from '@/workflows/fieldServices/blueprints/customers';
 
 export const filefeedAutomap =
   ({
     apiService,
     matchFilename,
+    defaultTargetSheet,
   }: {
     apiService: ApiService;
     matchFilename: RegExp;
+    defaultTargetSheet: string;
   }) =>
   (listener: FlatfileListener): void => {
     listener.use(
       automap({
         accuracy: 'confident',
         matchFilename,
-        defaultTargetSheet: CUSTOMERS_SHEET_NAME,
+        defaultTargetSheet,
       })
     );
 

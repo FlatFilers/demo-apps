@@ -17,6 +17,8 @@ import { FieldServicesShowApiService } from '@/shared/field-services-show-api-se
 import { ApiService } from '@/shared/api-service-base';
 import { plmPrefillData } from '@/shared/eventHandlers/plmPrefillData';
 import { fieldServicePrefillData } from '@/shared/eventHandlers/fieldServicePrefillData';
+import { PRODUCTS_SHEET_NAME } from '@/workflows/plm/blueprints/products';
+import { CUSTOMERS_SHEET_NAME } from '@/workflows/fieldServices/blueprints/customers';
 
 function configureSharedUses({
   listener,
@@ -70,6 +72,7 @@ export default function (listener: FlatfileListener) {
       filefeedAutomap({
         apiService: ProductsShowApiService,
         matchFilename: /^products-sample-data.*$/i,
+        defaultTargetSheet: PRODUCTS_SHEET_NAME,
       })
     );
 
@@ -109,6 +112,7 @@ export default function (listener: FlatfileListener) {
       filefeedAutomap({
         apiService: FieldServicesShowApiService,
         matchFilename: /^customers-sample-data.*$/i,
+        defaultTargetSheet: CUSTOMERS_SHEET_NAME,
       })
     );
 
