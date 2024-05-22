@@ -1,8 +1,9 @@
 import { SheetConfig } from '@flatfile/api/api';
 
-// Benefit Elections Sheet
+export const BENEFITS_SHEET_NAME = 'Benefit Elections';
+
 export const benefits: SheetConfig = {
-  name: 'Benefit Elections',
+  name: BENEFITS_SHEET_NAME,
   slug: 'benefit-elections-sheet',
   readonly: false,
   fields: [

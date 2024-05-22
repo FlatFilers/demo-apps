@@ -24,6 +24,7 @@ import { hcmPrefillData } from '@/shared/eventHandlers/hcmPrefillData';
 import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { hcmEmbeddedSpaceConfigure } from '@/workflows/hcm/actions/hcmEmbeddedSpaceConfigure';
 import { hcmFileFeedSpaceConfigure } from '@/workflows/hcm/actions/hcmFileFeedSpaceConfigure';
+import { BENEFITS_SHEET_NAME } from '@/workflows/hcm/blueprints/benefits';
 
 function configureSharedUses({
   listener,
@@ -157,6 +158,7 @@ export default function (listener: FlatfileListener) {
       filefeedAutomap({
         apiService: HcmShowApiService,
         matchFilename: /^benefits.*$/i,
+        defaultTargetSheet: BENEFITS_SHEET_NAME,
       })
     );
 

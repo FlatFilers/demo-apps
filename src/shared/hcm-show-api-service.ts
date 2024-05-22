@@ -1,5 +1,4 @@
 import { SyncedRecordsResponse } from '@/shared/api-service-base';
-import api from '@flatfile/api';
 import { FlatfileEvent } from '@flatfile/listener';
 import axios from 'axios';
 import invariant from 'ts-invariant';
@@ -40,16 +39,8 @@ export class HcmShowApiService {
       const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
       invariant(apiBaseUrl, 'Missing HCM_API_BASE_URL in environment secrets');
 
-      // const userId = '';
-      // const workflowType = 'filefeed';
-      // const response = await axios.post(
-      //   `${apiBaseUrl}/api/v1/sync-space`,
-      //   { userId, spaceId, workflowType },
-      //   { headers: await this.headers(event) }
-      // );
-
       const response = await axios.get(
-        `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
+        `${apiBaseUrl}/api/v2/sync-file-feed-space/${spaceId}`,
         {
           headers: await this.headers(event),
         }
