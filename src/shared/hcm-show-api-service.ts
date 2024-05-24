@@ -40,7 +40,7 @@ export class HcmShowApiService {
       invariant(apiBaseUrl, 'Missing HCM_API_BASE_URL in environment secrets');
 
       const response = await axios.get(
-        `${apiBaseUrl}/api/v2/sync-file-feed-space/${spaceId}`,
+        `${apiBaseUrl}/api/webhook/sync-space/${spaceId}`,
         {
           headers: await this.headers(event),
         }
