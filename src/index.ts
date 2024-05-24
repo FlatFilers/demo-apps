@@ -150,6 +150,7 @@ export default function (listener: FlatfileListener) {
     configureSharedUses({ listener, apiService: HcmShowApiService });
   });
 
+  // TODO: filefeed hook could be abstratced into a use function
   listener.namespace('space:hcmfilefeed', (listener) => {
     listener.use(hcmFileFeedSpaceConfigure);
     configureSharedUses({ listener, apiService: HcmShowApiService });
