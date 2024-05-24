@@ -134,4 +134,34 @@ export class HcmShowApiService {
 
     return employees;
   };
+
+  static sendFilefeedEvent = async (event: FlatfileEvent) => {
+    console.log('Sending filefeed event to hcm.show.');
+
+    const { spaceId } = event.context;
+    const topic = event.payload.job || event.topic;
+
+    if (!topic) {
+      return;
+    }
+
+    const apiBaseUrl = await event.secrets('HCM_API_BASE_URL');
+    const url = `${apiBaseUrl}/api/v1/sync-file-feed`;
+
+    let response;
+
+    try {
+      response = await axios.post(
+        url,
+        { spaceId, topic },
+        { headers: await this.headers(event) }
+      );
+
+      if (response.status !== 200) {
+        throw new Error(`response status was ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Failed to send filefeed event: ${error.message}`);
+    }
+  };
 }
