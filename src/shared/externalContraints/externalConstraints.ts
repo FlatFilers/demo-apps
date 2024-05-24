@@ -250,10 +250,11 @@ export const externalConstraints = {
             `The field "${key}" should be a number. Please enter a valid numeric value, using a dot (.) as a decimal separator.`
           );
         } else {
-          const roundedValue = Number(
-            numericValue.toFixed(config.decimalPlaces)
-          );
-          record.set(key, roundedValue);
+          const roundedValue = parseFloat(value).toFixed(config.decimalPlaces);
+          if (value !== roundedValue) {
+            record.set(key, roundedValue);
+            record.addInfo(key, `${key} has been rounded to 2 decimal places.`);
+          }
         }
       }
     },
