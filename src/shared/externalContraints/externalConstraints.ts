@@ -9,6 +9,10 @@ function formatDate(dateString, outputFormat) {
     'yyyy-MM-dd',
     'MM/dd/yyyy',
     'MM/dd/yy',
+    'M/d/yy',
+    'M/d/yyyy',
+    'MM/d/yyyy',
+    'd/MM/yyyy',
     'dd/MM/yyyy',
     'yyyy/MM/dd',
     // Add more input formats as needed
@@ -20,6 +24,11 @@ function formatDate(dateString, outputFormat) {
   for (const inputFormat of inputFormats) {
     parsedDate = parse(dateString, inputFormat, new Date());
     if (isValid(parsedDate)) {
+      // Check if the parsed year is less than 100 and adjust it if needed
+      const year = parsedDate.getFullYear();
+      if (year < 100) {
+        parsedDate.setFullYear(year + 2000);
+      }
       // If the date string is successfully parsed, format it using the specified output format
       return format(parsedDate, outputFormat);
     }
@@ -156,7 +165,6 @@ export const externalConstraints = {
       }
     },
   },
-
   numberRange: {
     validator: (value, key, { config, record }) => {
       if (value !== undefined && value !== null) {
@@ -258,6 +266,16 @@ export const externalConstraints = {
             record.addInfo(key, `${key} has been rounded to 2 decimal places.`);
           }
         }
+      }
+    },
+  },
+  contactInfo: {
+    validator: (_value, key, { record }) => {
+      if (!record.get('email') && !record.get('phoneNumber')) {
+        record.addError(
+          key,
+          'One of the following contact methods is required: Phone Number or Email Address!'
+        );
       }
     },
   },
