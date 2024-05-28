@@ -16,9 +16,9 @@ export function hcmProjectSpaceConfigure(listener: FlatfileListener) {
             name: HCM_WORKBOOK_NAME,
             namespace: 'hcmImport',
             sheets: [
-              hcmBlueprints.departments,
-              hcmBlueprints.employees,
               hcmBlueprints.jobs,
+              hcmBlueprints.employees,
+              hcmBlueprints.departments,
             ],
             actions: [
               {

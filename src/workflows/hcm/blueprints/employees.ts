@@ -120,6 +120,11 @@ export const employees: SheetConfig = {
         {
           type: 'required',
         },
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
       ],
       readonly: false,
     },
@@ -131,7 +136,13 @@ export const employees: SheetConfig = {
       label: 'End Employment Date',
       description:
         'The End Employment Date for the position of fixed term or temporary employees.',
-      constraints: [],
+      constraints: [
+        {
+          type: 'external',
+          validator: 'date',
+          config: { format: 'yyyy-MM-dd' },
+        },
+      ],
       readonly: false,
     },
     {
@@ -213,7 +224,16 @@ export const employees: SheetConfig = {
       label: 'Email Address',
       description:
         "The email address of the Employee. Email addresses must be in the format of 'xxx@yy.com'. Valid examples: john.doe@aol.com, jane@aol.com.",
-      constraints: [{ type: 'external', validator: 'email' }],
+      constraints: [
+        {
+          type: 'external',
+          validator: 'email',
+        },
+        {
+          type: 'external',
+          validator: 'contactInfo',
+        },
+      ],
       readonly: false,
     },
     {
@@ -239,7 +259,10 @@ export const employees: SheetConfig = {
       label: 'Phone Number',
       description: '',
       constraints: [
-        { type: 'external', validator: 'phone', config: { region: 'US' } },
+        {
+          type: 'external',
+          validator: 'contactInfo',
+        },
       ],
       readonly: false,
     },
