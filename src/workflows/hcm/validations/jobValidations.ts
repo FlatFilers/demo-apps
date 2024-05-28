@@ -4,7 +4,6 @@ import { isNil, isNotNil } from '@/shared/validations/validations';
 export async function jobValidations(
   record: FlatfileRecord
 ): Promise<FlatfileRecord> {
-  // validateJobDates(record);
   addJobCode(record);
 
   return record;
