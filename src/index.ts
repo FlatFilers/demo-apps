@@ -25,6 +25,7 @@ import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { hcmEmbeddedSpaceConfigure } from '@/workflows/hcm/actions/hcmEmbeddedSpaceConfigure';
 import { hcmFileFeedSpaceConfigure } from '@/workflows/hcm/actions/hcmFileFeedSpaceConfigure';
 import { BENEFITS_SHEET_NAME } from '@/workflows/hcm/blueprints/benefits';
+import { hcmDedupeEmployees } from '@/shared/eventHandlers/hcmDedupeEmployees';
 
 function configureSharedUses({
   listener,
@@ -36,6 +37,7 @@ function configureSharedUses({
   listener.use(ExcelExtractor());
   listener.use(JSONExtractor());
   listener.use(handleSubmitData({ apiService }));
+  listener.use(hcmDedupeEmployees());
 
   // Apply external constraints
   Object.entries(externalConstraints).forEach(

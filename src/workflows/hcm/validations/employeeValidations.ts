@@ -1,6 +1,6 @@
 import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { isNil, isNotNil } from '@/shared/validations/validations';
-import { jobValidations } from '@/workflows/hcm/validations/jobValidations';
+import { addJobCode } from '@/workflows/hcm/validations/jobValidations';
 import { FlatfileEvent } from '@flatfile/listener';
 import { FlatfileRecord } from '@flatfile/plugin-record-hook';
 
@@ -21,13 +21,13 @@ export async function employeeValidations(
     return;
   }
 
+  addJobCode(records);
   records.forEach((record: FlatfileRecord) => {
     checkApiForDuplicateEmployeeId(record, employees);
     concatinateNames(record);
     splitFullName(record);
     employeeHours(record);
     validateJobDates(record);
-    jobValidations(record);
 
     return record;
   });

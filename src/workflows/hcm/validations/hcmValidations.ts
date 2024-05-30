@@ -12,9 +12,7 @@ export async function hcmValidations(listener: FlatfileListener) {
 
   listener.use(
     bulkRecordHook('jobs-sheet', async (records) => {
-      records.forEach((record) => {
-        jobValidations(record);
-      });
+      await jobValidations(records);
     })
   );
 }
