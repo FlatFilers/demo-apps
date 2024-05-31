@@ -174,7 +174,12 @@ function employeeHours(record: FlatfileRecord) {
     }
 
     // Add a warning if schedHours exceeds defHours but is within the allowed range
-    if (schedHours > defHours && schedHours <= 168) {
+    if (
+      typeof schedHours === 'number' &&
+      typeof defHours === 'number' &&
+      schedHours > defHours &&
+      schedHours <= 168
+    ) {
       record.addWarning(
         'scheduledWeeklyHours',
         'Scheduled Hours exceeds Default Hours'
