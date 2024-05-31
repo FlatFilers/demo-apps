@@ -152,9 +152,8 @@ export const employees: SheetConfig = {
       label: 'Job Name',
       description: 'The Job Profile for the Employee.',
       constraints: [
-        {
-          type: 'required',
-        },
+        { type: 'required' },
+        { type: 'external', validator: 'length', config: { min: 1, max: 50 } },
       ],
       readonly: false,
       config: {
