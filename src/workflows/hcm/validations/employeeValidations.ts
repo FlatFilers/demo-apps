@@ -21,16 +21,14 @@ export async function employeeValidations(
     return;
   }
 
-  addJobCode(records);
-  records.forEach((record: FlatfileRecord) => {
+  for (const record of records) {
     checkApiForDuplicateEmployeeId(record, employees);
     concatinateNames(record);
     splitFullName(record);
     employeeHours(record);
     validateJobDates(record);
-
-    return record;
-  });
+    addJobCode(record);
+  }
 }
 
 function checkApiForDuplicateEmployeeId(record: FlatfileRecord, employees) {
