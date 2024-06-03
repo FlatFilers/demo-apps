@@ -1,6 +1,6 @@
 import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { isNil, isNotNil } from '@/shared/validations/validations';
-import { jobValidations } from '@/workflows/hcm/validations/jobValidations';
+import { addJobCode } from '@/workflows/hcm/validations/jobValidations';
 import { FlatfileEvent } from '@flatfile/listener';
 import { FlatfileRecord } from '@flatfile/plugin-record-hook';
 
@@ -21,16 +21,14 @@ export async function employeeValidations(
     return;
   }
 
-  records.forEach((record: FlatfileRecord) => {
+  for (const record of records) {
     checkApiForDuplicateEmployeeId(record, employees);
     concatinateNames(record);
     splitFullName(record);
     employeeHours(record);
     validateJobDates(record);
-    jobValidations(record);
-
-    return record;
-  });
+    addJobCode(record);
+  }
 }
 
 function checkApiForDuplicateEmployeeId(record: FlatfileRecord, employees) {
@@ -174,7 +172,12 @@ function employeeHours(record: FlatfileRecord) {
     }
 
     // Add a warning if schedHours exceeds defHours but is within the allowed range
-    if (schedHours > defHours && schedHours <= 168) {
+    if (
+      typeof schedHours === 'number' &&
+      typeof defHours === 'number' &&
+      schedHours > defHours &&
+      schedHours <= 168
+    ) {
       record.addWarning(
         'scheduledWeeklyHours',
         'Scheduled Hours exceeds Default Hours'

@@ -25,6 +25,8 @@ import { HcmShowApiService } from '@/shared/hcm-show-api-service';
 import { hcmEmbeddedSpaceConfigure } from '@/workflows/hcm/actions/hcmEmbeddedSpaceConfigure';
 import { hcmFileFeedSpaceConfigure } from '@/workflows/hcm/actions/hcmFileFeedSpaceConfigure';
 import { BENEFITS_SHEET_NAME } from '@/workflows/hcm/blueprints/benefits';
+import { hcmDedupeEmployees } from '@/shared/eventHandlers/hcmDedupeEmployees';
+import { hcmValidateReportingStructure } from '@/shared/eventHandlers/hcmValidateReportingStructure';
 
 function configureSharedUses({
   listener,
@@ -141,6 +143,8 @@ export default function (listener: FlatfileListener) {
   listener.namespace('space:hcmproject', (listener) => {
     listener.use(hcmProjectSpaceConfigure);
     listener.use(hcmPrefillData());
+    listener.use(hcmDedupeEmployees());
+    listener.use(hcmValidateReportingStructure());
     configureSharedUses({ listener, apiService: HcmShowApiService });
   });
 
