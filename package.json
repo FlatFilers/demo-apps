@@ -19,7 +19,7 @@
     "@flatfile/plugin-json-extractor": "^0.8.2",
     "@flatfile/plugin-record-hook": "^1.6.0",
     "@flatfile/plugin-space-configure": "^0.5.2",
-    "@flatfile/plugin-xlsx-extractor": "1.11.4",
+    "@flatfile/plugin-xlsx-extractor": "^3.1.4",
     "axios": "1.6.8",
     "date-fns": "^3.6.0",
     "flatfile": "^3.8.0",
