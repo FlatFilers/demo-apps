@@ -13,7 +13,7 @@
   "dependencies": {
     "@everapi/freecurrencyapi-js": "^1.0.1",
     "@flatfile/api": "^1.9.13",
-    "@flatfile/listener": "1.0.1",
+    "@flatfile/listener": "^1.0.5",
     "@flatfile/plugin-automap": "^0.2.2",
     "@flatfile/plugin-constraints": "^1.1.7",
     "@flatfile/plugin-json-extractor": "0.7.1",
