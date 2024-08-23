@@ -17,7 +17,7 @@
     "@flatfile/plugin-automap": "^0.3.2",
     "@flatfile/plugin-constraints": "^1.1.7",
     "@flatfile/plugin-json-extractor": "0.7.1",
-    "@flatfile/plugin-record-hook": "1.4.6",
+    "@flatfile/plugin-record-hook": "^1.6.0",
     "@flatfile/plugin-space-configure": "0.3.4",
     "@flatfile/plugin-xlsx-extractor": "1.11.4",
     "axios": "1.6.8",
