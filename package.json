@@ -12,10 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@everapi/freecurrencyapi-js": "^1.0.1",
-    "@flatfile/api": "1.7.11",
+    "@flatfile/api": "^1.9.13",
     "@flatfile/listener": "1.0.1",
-    "@flatfile/plugin-constraints": "^1.1.7",
     "@flatfile/plugin-automap": "^0.2.2",
+    "@flatfile/plugin-constraints": "^1.1.7",
     "@flatfile/plugin-json-extractor": "0.7.1",
     "@flatfile/plugin-record-hook": "1.4.6",
     "@flatfile/plugin-space-configure": "0.3.4",
