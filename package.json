@@ -20,7 +20,7 @@
     "@flatfile/plugin-record-hook": "^1.6.0",
     "@flatfile/plugin-space-configure": "^0.5.2",
     "@flatfile/plugin-xlsx-extractor": "^3.1.4",
-    "axios": "1.6.8",
+    "axios": "^1.7.7",
     "date-fns": "^3.6.0",
     "flatfile": "^3.8.0",
     "google-libphonenumber": "^3.2.34",
