@@ -12,21 +12,21 @@
   "license": "ISC",
   "dependencies": {
     "@everapi/freecurrencyapi-js": "^1.0.1",
-    "@flatfile/api": "1.7.11",
-    "@flatfile/listener": "1.0.1",
-    "@flatfile/plugin-constraints": "^1.1.7",
-    "@flatfile/plugin-automap": "^0.2.2",
-    "@flatfile/plugin-json-extractor": "0.7.1",
-    "@flatfile/plugin-record-hook": "1.4.6",
-    "@flatfile/plugin-space-configure": "0.3.4",
-    "@flatfile/plugin-xlsx-extractor": "1.11.4",
-    "axios": "1.6.8",
+    "@flatfile/api": "^1.9.13",
+    "@flatfile/listener": "^1.0.5",
+    "@flatfile/plugin-automap": "^0.4.1",
+    "@flatfile/plugin-constraints": "^2.0.1",
+    "@flatfile/plugin-json-extractor": "^0.8.2",
+    "@flatfile/plugin-record-hook": "^1.6.0",
+    "@flatfile/plugin-space-configure": "^0.5.3",
+    "@flatfile/plugin-xlsx-extractor": "^3.1.4",
+    "axios": "^1.7.7",
     "date-fns": "^3.6.0",
-    "flatfile": "3.6.2",
-    "google-libphonenumber": "^3.2.34",
+    "flatfile": "^3.8.0",
+    "google-libphonenumber": "^3.2.38",
     "ts-invariant": "^0.10.3"
   },
   "devDependencies": {
-    "@types/node": "^18.16.0"
+    "@types/node": "^22.5.3"
   }
 }
