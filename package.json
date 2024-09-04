@@ -14,7 +14,7 @@
     "@everapi/freecurrencyapi-js": "^1.0.1",
     "@flatfile/api": "^1.9.13",
     "@flatfile/listener": "^1.0.5",
-    "@flatfile/plugin-automap": "^0.4.0",
+    "@flatfile/plugin-automap": "^0.4.1",
     "@flatfile/plugin-constraints": "^2.0.0",
     "@flatfile/plugin-json-extractor": "^0.8.2",
     "@flatfile/plugin-record-hook": "^1.6.0",
