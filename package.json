@@ -15,10 +15,10 @@
     "@flatfile/api": "^1.9.13",
     "@flatfile/listener": "^1.0.5",
     "@flatfile/plugin-automap": "^0.4.1",
-    "@flatfile/plugin-constraints": "^2.0.0",
+    "@flatfile/plugin-constraints": "^2.0.1",
     "@flatfile/plugin-json-extractor": "^0.8.2",
     "@flatfile/plugin-record-hook": "^1.6.0",
-    "@flatfile/plugin-space-configure": "^0.5.2",
+    "@flatfile/plugin-space-configure": "^0.5.3",
     "@flatfile/plugin-xlsx-extractor": "^3.1.4",
     "axios": "^1.7.7",
     "date-fns": "^3.6.0",
@@ -27,6 +27,6 @@
     "ts-invariant": "^0.10.3"
   },
   "devDependencies": {
-    "@types/node": "^22.5.2"
+    "@types/node": "^22.5.3"
   }
 }
