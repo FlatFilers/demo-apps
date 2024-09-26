@@ -69,7 +69,7 @@ export const externalConstraints = {
       if (value) {
         try {
           const phoneNumber = phoneUtil.parse(value, config.region);
-          if (!phoneUtil.isValidNumber(phoneNumber)) {
+          if (!phoneUtil.isPossibleNumber(phoneNumber)) {
             record.addError(key, 'Invalid phone number.');
           }
         } catch (error) {
